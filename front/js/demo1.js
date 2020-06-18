@@ -1,5 +1,5 @@
 (async function () {
-    const {ConferenceApi,Utils,ERROR,MediasouptSocketApi}=window;
+    const {ConferenceApi,Utils,ERROR,MediasoupSocketApi}=window;
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     let capture, mediaStrem;
@@ -147,7 +147,7 @@
 
     }));
     let isRecording=false;
-    const restApi=new MediasoupRestApi(`${location.protocol}//${location.host}/0`,'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiJzdHJlYW0xIiwib3BlcmF0aW9uIjoiMiIsImlhdCI6MTU5MDE0NjMxNn0.80ImcNlmRsGLoyDNJ8QUK8W-2lygfvlCWdyBf5VDqrl6Q6hE0FnOj_tL0V5X51v1y8Ah2nCgFykBKahhYW04Nw');
+    const restApi=new MediasoupSocketApi(`${location.protocol}//${location.host}/0`,'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiJzdHJlYW0xIiwib3BlcmF0aW9uIjoiMiIsImlhdCI6MTU5MDE0NjMxNn0.80ImcNlmRsGLoyDNJ8QUK8W-2lygfvlCWdyBf5VDqrl6Q6hE0FnOj_tL0V5X51v1y8Ah2nCgFykBKahhYW04Nw');
     recording.addEventListener('click', async (event)=> {
         recording.disabled=true;
         const kinds=[];
