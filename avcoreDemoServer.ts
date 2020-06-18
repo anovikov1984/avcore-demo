@@ -9,6 +9,8 @@ console_stamp(console, '[HH:MM:ss.l]');
 const app = express();
 app.use(cors());
 app.use(express.static(join(__dirname,'front')));
+app.use('/dist',express.static(join(__dirname,'node_modules/avcore/dist')));
+
 const server = createServer(app);
 server.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);
