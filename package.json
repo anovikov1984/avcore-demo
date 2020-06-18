@@ -19,6 +19,7 @@
     "express": "^4.17.1"
   },
   "scripts": {
-    "start": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log 2>&1 &"
+    "start": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log 2>&1 &",
+    "test": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log"
   }
 }

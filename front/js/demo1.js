@@ -1,8 +1,5 @@
 (async function () {
-    const {ConferenceApi,Utils,ERROR,debug,MediasoupRestApi}=window;
-    debug.enable(
-        'conference-api* mediasoup-client*' //enable conference api and mediasoup client logs
-    );
+    const {ConferenceApi,Utils,ERROR,MediasouptSocketApi}=window;
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     let capture, mediaStrem;
