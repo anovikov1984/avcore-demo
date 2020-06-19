@@ -13,13 +13,13 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "avcore": "git+ssh://git@github.com:anovikov1984/avcore.git",
+    "avcore": "git+ssh://git@github.com/anovikov1984/avcore.git",
     "console-stamp": "^0.2.9",
     "cors": "^2.8.5",
     "express": "^4.17.1"
   },
   "scripts": {
-    "start": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log 2>&1 &",
+    "start": "ts-node ./avcoreDemoServer.ts",
     "test": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log"
   }
 }
