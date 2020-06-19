@@ -20,6 +20,6 @@
   },
   "scripts": {
     "start": "ts-node ./avcoreDemoServer.ts",
-    "test": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log"
+    "test": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log &"
   }
 }
