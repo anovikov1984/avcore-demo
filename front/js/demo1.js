@@ -1,5 +1,5 @@
 (async function () {
-    const {ConferenceApi,Utils,ERROR,MediasoupSocketApi}=window;
+    const {ConferenceApi,Utils,ERROR,MediasoupSocketApi}=avcore;
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     let capture, mediaStrem;

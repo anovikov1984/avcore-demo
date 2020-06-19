@@ -1,5 +1,5 @@
 (async function () {
-    const {ConferenceApi,Utils,ERROR}=window;
+    const {ConferenceApi,Utils,ERROR}=avcore;
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     let playback;
