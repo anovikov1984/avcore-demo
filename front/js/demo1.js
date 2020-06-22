@@ -138,10 +138,11 @@
 
         }
         catch (e) {
+            console.log(e);
+
             if(e && ERROR[e.errorId]){
                 alert(ERROR[e.errorId])
             }
-            console.log(e);
             if(capture){
                 await capture.close();
 
