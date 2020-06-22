@@ -149,6 +149,7 @@
     }));
     let isRecording=false;
     const socketApi=new MediasoupSocketApi('https://rpc.codeda.com','eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiJzdHJlYW0xIiwib3BlcmF0aW9uIjoiMiIsImlhdCI6MTU5MDE0NjMxNn0.80ImcNlmRsGLoyDNJ8QUK8W-2lygfvlCWdyBf5VDqrl6Q6hE0FnOj_tL0V5X51v1y8Ah2nCgFykBKahhYW04Nw');
+    socketApi.initSocket();
     recording.addEventListener('click', async (event)=> {
         recording.disabled=true;
         const kinds=[];
