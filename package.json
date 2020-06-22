@@ -19,6 +19,7 @@
     "express": "^4.17.1"
   },
   "scripts": {
+    "update-avcore": "npm update avcore -f",
     "start": "ts-node ./avcoreDemoServer.ts",
     "test": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log &"
   }
