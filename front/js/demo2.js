@@ -112,7 +112,6 @@
             play();
 
             $('#stop-playing').disabled=false;
-            $('#pause-unpause').disabled=false;
             $('#get-stats').disabled=false;
 
         }
@@ -133,7 +132,6 @@
         if(playback) {
             playback.close();
             $('#stop-playing').disabled=true;
-            $('#pause-unpause').disabled=true;
             $('#subscribe').disabled=false;
             $('#get-stats').disabled=true;
         }
