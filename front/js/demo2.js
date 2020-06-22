@@ -2,6 +2,8 @@
     const {ConferenceApi,Utils,ERROR}=avcoreClient;
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
+    const url='https://rpc.codeda.com';
+    const worker=1;
     let playback;
     const audioPublish=$('#audioPublish');
     const videoPublish=$('#videoPublish');
@@ -50,6 +52,7 @@
                 kinds.push('video')
             }
             playback = new ConferenceApi({
+                url,worker,
                 kinds,
                 token: "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiJzdHJlYW0xIiwib3BlcmF0aW9uIjoiMSIsImlhdCI6MTU4OTUzNDEzOX0.MsLz3ctklftdSHiNYReabdNVWr_7vW3-rPZ1jTssxguEo6SS4jLFbVu16v9NeLKzNEf1e6PVDmYN8je9GcBZXw",
                 stream: "stream1"
@@ -133,17 +136,6 @@
             $('#pause-unpause').disabled=true;
             $('#subscribe').disabled=false;
             $('#get-stats').disabled=true;
-        }
-    });
-    $('#pause-unpause').addEventListener('click', async function (event) {
-        event.preventDefault();
-        if(playback) {
-            this.disabled=true;
-            await playback.pause();
-            await new Promise(resolve => setTimeout(resolve,500));
-            await playback.resume();
-            this.disabled=false;
-
         }
     });
 })();

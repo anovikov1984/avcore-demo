@@ -12,6 +12,8 @@
     const token= "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiJzdHJlYW0xIiwib3BlcmF0aW9uIjoiMSIsImlhdCI6MTU4OTUzNDEzOX0.MsLz3ctklftdSHiNYReabdNVWr_7vW3-rPZ1jTssxguEo6SS4jLFbVu16v9NeLKzNEf1e6PVDmYN8je9GcBZXw";
     const stream= "stream1";
     const recording=$('#recording');
+    const url='https://rpc.codeda.com';
+    const worker=1;
     $$('.publish-checkbox').forEach(b=>b.addEventListener('change',async (event)=> {
         console.log('change',b.id);
         if(mediaStrem && capture){
@@ -87,6 +89,7 @@
         const bitrate=parseInt($('#bitrateInput').value);
         try {
             capture=new ConferenceApi({
+                url,worker,
                 maxIncomingBitrate:bitrate||0,
                 simulcast: simulcast.checked,
                 stream,
@@ -148,7 +151,7 @@
 
     }));
     let isRecording=false;
-    const socketApi=new MediasoupSocketApi('https://rpc.codeda.com','eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiJzdHJlYW0xIiwib3BlcmF0aW9uIjoiMiIsImlhdCI6MTU5MDE0NjMxNn0.80ImcNlmRsGLoyDNJ8QUK8W-2lygfvlCWdyBf5VDqrl6Q6hE0FnOj_tL0V5X51v1y8Ah2nCgFykBKahhYW04Nw');
+    const socketApi=new MediasoupSocketApi(url,worker,'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiJzdHJlYW0xIiwib3BlcmF0aW9uIjoiMiIsImlhdCI6MTU5MDE0NjMxNn0.80ImcNlmRsGLoyDNJ8QUK8W-2lygfvlCWdyBf5VDqrl6Q6hE0FnOj_tL0V5X51v1y8Ah2nCgFykBKahhYW04Nw');
     socketApi.initSocket();
     recording.addEventListener('click', async (event)=> {
         recording.disabled=true;
