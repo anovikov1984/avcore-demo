@@ -23,7 +23,7 @@
     const abr=$(`#audio-bit-rate`);
     const connectionBox=$('#connection-box');
     const conferenceIds={};
-    const socketApi=new MediasoupSocketApi(`${location.protocol}//${location.host}/0`,token);
+    const socketApi=new MediasoupSocketApi(url,worker,token);
     socketApi.initSocket();
     $('#subscribe').addEventListener('click', async (event)=> {
         $('#subscribe').disabled=true;
