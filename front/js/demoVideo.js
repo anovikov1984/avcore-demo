@@ -14,7 +14,7 @@
     const token = getParameterByName('token');
 	const listen = !!getParameterByName('listen');
     const simulcast = !!getParameterByName('simulcast');
-    const url = getParameterByName('url');
+    const url = getParameterByName('url')|'https://rpc.codeda.com';
     const worker = parseInt(getParameterByName('worker')||'0')||0;
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
@@ -100,7 +100,8 @@
 			const _stream=await Utils.getUserMedia({video:true,audio:true});
 			try {
 				capture = new ConferenceApi({
-					stream,
+                    url,worker,
+                    stream,
 					token
 				}).on('bitRate',({bitRate,kind})=>{
 					if(kind==='video'){
