@@ -23,22 +23,23 @@
     const abr=$(`#audio-bit-rate`);
     const connectionBox=$('#connection-box');
     const conferenceIds={};
-    const restApi=new MediasoupSocketApi(`${location.protocol}//${location.host}/0`,token);
+    const socketApi=new MediasoupSocketApi(`${location.protocol}//${location.host}/0`,token);
+    socketApi.initSocket();
     $('#subscribe').addEventListener('click', async (event)=> {
         $('#subscribe').disabled=true;
         event.preventDefault();
         let isError=false;
         try{
-            await restApi.stopFileStreaming({stream});
+            await socketApi.stopFileStreaming({stream});
             const rtmpUrl = getParameterByName('rtmpUrl');
             const filePath = getParameterByName('filePath')||'https://codeda.com/data/syncTest.mp4';
-            const {kinds}=await restApi.kindsByFile({filePath:rtmpUrl||filePath});
+            const {kinds}=await socketApi.kindsByFile({filePath:rtmpUrl||filePath});
             //const kinds=['audio','video'];
             if(rtmpUrl){
-                await restApi.rtmpStreaming({kinds,stream,rtmpUrl,videoBitrate:'4000'});
+                await socketApi.rtmpStreaming({kinds,stream,rtmpUrl,videoBitrate:'4000'});
             }
             else {
-                await restApi.fileStreaming({kinds,stream,filePath,videoBitrate:'4000'});
+                await socketApi.fileStreaming({kinds,stream,filePath,videoBitrate:'4000'});
             }
             playback = new ConferenceApi({
                 url,worker,
@@ -130,7 +131,7 @@
         if (playback) {
             await playback.close();
         }
-        await restApi.stopFileStreaming({stream});
+        await socketApi.stopFileStreaming({stream});
         $('#request-keyframe').disabled=true;
         $('#stop-playing').disabled=true;
         $('#subscribe').disabled=false;
@@ -138,7 +139,7 @@
     $('#request-keyframe').addEventListener('click',async function (event) {
         event.preventDefault();
         if (conferenceIds['video']) {
-            await restApi.requestKeyframe({consumerId:conferenceIds['video']})
+            await socketApi.requestKeyframe({consumerId:conferenceIds['video']})
         }
     });
 })();
