@@ -1,4 +1,6 @@
 (async function () {
+    const {ConferenceApi,Utils,ERROR}=avcoreClient;
+
     function getParameterByName(name, url) {
         if (!url) url = window.location.href;
         name = name.replace(/[\[\]]/g, "\\$&");
@@ -16,7 +18,6 @@
     const url = getParameterByName('url');
     const worker = parseInt(getParameterByName('worker')||'0')||0;
 
-    const {ConferenceApi,Utils,ERROR}=avcoreClient;
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     let playback,capture;
