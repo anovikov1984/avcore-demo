@@ -109,11 +109,11 @@
             await new Promise(resolve => setTimeout(resolve,2000));
         }
         catch (e) {
+            console.log(e);
             isError=true;
             if (e && ERROR[e.errorId]) {
                 alert(ERROR[e.errorId])
             }
-            console.log(e);
             if (playback) {
                 await playback.close();
             }
