@@ -14,7 +14,7 @@
     const token = getParameterByName('token');
 	const listen = !!getParameterByName('listen');
     const simulcast = !!getParameterByName('simulcast');
-    const url = getParameterByName('url')|'https://rpc.codeda.com';
+    const url = getParameterByName('url')||'https://rpc.codeda.com';
     const worker = parseInt(getParameterByName('worker')||'0')||0;
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);

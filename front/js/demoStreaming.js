@@ -8,7 +8,7 @@
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
-    const url = getParameterByName('url')|'https://rpc.codeda.com';
+    const url = getParameterByName('url')||'https://rpc.codeda.com';
     const worker = parseInt(getParameterByName('worker')||'0')||0;
     const {ConferenceApi,Utils,ERROR}=avcoreClient;
     const {MediasoupSocketApi}=avcore;
