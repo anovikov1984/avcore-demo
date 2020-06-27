@@ -17,6 +17,8 @@
     const simulcast = !!getParameterByName('simulcast');
     const url = getParameterByName('url')||'https://rpc.codeda.com';
     const worker = parseInt(getParameterByName('worker')||'0')||0;
+    const kinds=(kindsParam && kindsParam.split(',')) || ['video','audio'];
+    const kindsParam=getParameterByName('kinds');
 
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
@@ -28,7 +30,6 @@
         const brOut=$(`#publish-video-bit-rate`);
         const connectionBox=$('#connection-box');
         try {
-            const kinds=['video','audio'];
             playback = new ConferenceApi({
                 url,worker,
                 kinds,
