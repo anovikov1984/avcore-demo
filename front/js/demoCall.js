@@ -98,7 +98,7 @@
             return;
         }
 
-        const _stream=await Utils.getUserMedia({video:true,audio:true});
+        const _stream=await Utils.getUserMedia({video:kinds.includes('video'),audio:kinds.includes('audio')});
         try {
             capture = new ConferenceApi({
                 url,worker,
