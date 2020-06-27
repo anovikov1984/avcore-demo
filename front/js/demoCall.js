@@ -17,8 +17,8 @@
     const simulcast = !!getParameterByName('simulcast');
     const url = getParameterByName('url')||'https://rpc.codeda.com';
     const worker = parseInt(getParameterByName('worker')||'0')||0;
-    const kinds=(kindsParam && kindsParam.split(',')) || ['video','audio'];
     const kindsParam=getParameterByName('kinds');
+    const kinds=(kindsParam && kindsParam.split(',')) || ['video','audio'];
 
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
