@@ -26,7 +26,7 @@ STREAM_CALL_2=`uuidgen`
 
 TOKEN_VIDEO=`curl -X GET "${SRV}/auth/${STREAM_VIDEO}/1" -H "accept: text/plain" 2>/dev/null`
 TOKEN_RECORDING=`curl -X GET "${SRV}/auth/${STREAM_VIDEO}/2" -H "accept: text/plain" 2>/dev/null`
-TOKEN_RTMP=`curl -X GET "${SRV}/auth/${STREAM_RTMP}/1" -H "accept: text/plain" 2>/dev/null`
+TOKEN_RTMP=`curl -X GET "${SRV}/auth/${STREAM_RTMP}/3" -H "accept: text/plain" 2>/dev/null`
 TOKEN_CALL_1=`curl -X GET "${SRV}/auth/${STREAM_CALL_1}/1" -H "accept: text/plain" 2>/dev/null`
 TOKEN_CALL_2=`curl -X GET "${SRV}/auth/${STREAM_CALL_2}/1" -H "accept: text/plain" 2>/dev/null`
 
@@ -52,7 +52,9 @@ echo "https://avcore-demo.codeda.com/demoCall.html?url=${SRV}&worker=${WORKER}&s
 echo ""
 
 echo "RTMP:"
+echo "url: rtmp://codeda.com/live/"
+echo "key: ${STREAM_RTMP}"
 echo ""
-echo "https://avcore-demo.codeda.com/demoStreaming.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP}&token=${TOKEN_RTMP}"
+echo "https://avcore-demo.codeda.com/demoStreaming.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP}&token=${TOKEN_RTMP}&rtmpUrl=rtmp://127.0.0.1/live/${STREAM_RTMP}"
 echo ""
 echo "https://avcore-demo.codeda.com/demoVideo.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP}&token=${TOKEN_RTMP}"

@@ -16,8 +16,8 @@
     const $$ = document.querySelectorAll.bind(document);
     const streamTable=$('#streamTable');
     let playback;
-    const token="eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiJzdHJlYW0xIiwib3BlcmF0aW9uIjoiMyIsImlhdCI6MTU5MDE0NjUyNn0.t5cA373_vhP3f1h5zH8sGYuA-C3sjzK5cOVeT5OJdSMXLKo12qvX9sXqcIvaptcjdXi0yKmCUn0SV6GpDxjAbA";
-    const stream= "stream1";
+    const stream = getParameterByName('stream')||"stream1";
+    const token = getParameterByName('token') || "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiJzdHJlYW0xIiwib3BlcmF0aW9uIjoiMyIsImlhdCI6MTU5MDE0NjUyNn0.t5cA373_vhP3f1h5zH8sGYuA-C3sjzK5cOVeT5OJdSMXLKo12qvX9sXqcIvaptcjdXi0yKmCUn0SV6GpDxjAbA";
     const v=$('#playback-video');
     const vbr=$(`#video-bit-rate`);
     const abr=$(`#audio-bit-rate`);
