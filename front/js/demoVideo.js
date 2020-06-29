@@ -148,13 +148,14 @@
 
     $('#stop-playing').addEventListener('click', function (event) {
         event.preventDefault();
+        $('#stop-playing').disabled=true;
         if(playback) {
             playback.close();
-            $('#subscribe').disabled=false;
         }
         if(capture){
             capture.close();
         }
+        $('#subscribe').disabled=false;
     });
     const recording=$('#recording');
     recording.disabled=true;
