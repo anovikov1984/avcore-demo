@@ -84,7 +84,7 @@
         const td1=document.createElement('td');
         const a=document.createElement('a');
         a.target='_blank';
-        a.href=`${location.protocol}//${location.host}/recordings/${recording}`;
+        a.href=`${url}/recordings/${recording}`;
         a.innerText=recording;
         td1.appendChild(a);
         td1.style.width="100%";
