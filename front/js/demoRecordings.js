@@ -1,5 +1,5 @@
 (async function () {
-    const {MediasoupSocketApi}=avcoreClient;
+    const {MediasoupSocketApi}=avcore;
 
     function getParameterByName(name, url) {
         if (!url) url = window.location.href;
