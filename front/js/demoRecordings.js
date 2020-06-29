@@ -42,10 +42,14 @@
         const td1=document.createElement('td');
         td1.innerText=stream;
         td1.style.width="100%";
-        td1.style.fontSize="30px";
+        td1.style.fontSize="20px";
+        if(stream===_stream){
+            td1.classList.add('contact-form-btn-red');
+        }
         tr.appendChild(td1);
         const td2=document.createElement('td');
         const listButton=document.createElement('button');
+        listButton.classList.add('contact-form-btn');
         if(stream===_stream){
             listButton.classList.add('contact-form-btn-red');
 
