@@ -164,6 +164,9 @@ input.input {
   justify-content: center;
   padding-top: 10px;
 }
+.contact-form-btn-red {
+  color: #ff0000;
+}
 .contact-form-btn {
   display: -webkit-box;
   display: -webkit-flex;

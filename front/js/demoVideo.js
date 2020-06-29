@@ -12,10 +12,17 @@
     }
     const stream = getParameterByName('stream');
     const token = getParameterByName('token');
-	const listen = !!getParameterByName('listen');
+    const recToken = getParameterByName('recToken');
+    const listen = !!getParameterByName('listen');
     const simulcast = !!getParameterByName('simulcast');
     const url = getParameterByName('url')||'https://rpc.codeda.com';
-    const worker = parseInt(getParameterByName('worker')||'0')||0;
+    const kindsParam=getParameterByName('kinds');
+    const kinds=(kindsParam && kindsParam.split(',')) || ['video','audio'];
+    const workerStr=getParameterByName('worker')||'0';
+    const workerPerServer=4;
+    const numServers=1;
+    const worker = workerStr==='random'?Math.floor(Math.random()*numServers*workerPerServer):parseInt(workerStr)||0;
+    console.log(`worker is ${worker}`);
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     let playback,capture;
@@ -24,118 +31,117 @@
         event.preventDefault();
         const br=$(`#playback-video-bit-rate`);
         const connectionBox=$('#connection-box');
-		if(listen){
-			try {
-				const kindsParam=getParameterByName('kinds');
-				const kinds=(kindsParam && kindsParam.split(',')) || ['video','audio'];
-				playback = new ConferenceApi({
+        if(listen){
+            try {
+                playback = new ConferenceApi({
                     url,worker,
                     kinds,
-					token,
-					stream,
+                    token,
+                    stream,
                     simulcast
-				}).on('bitRate',({bitRate,kind})=>{
-					if(kind==='video'){
-						br.innerText=Math.round(bitRate).toString();
-						if(bitRate>0){
-							br.classList.add('connected');
-						}
-						else {
-							br.classList.remove('connected');
-						}
-					}
-				}).on('connectionstatechange',({state})=>{
-					console.log('connectionstatechange',state);
-					if(state==='connected'){
-						connectionBox.classList.add('connected');
-					}
-					else {
-						connectionBox.classList.remove('connected');
-					}
-				});
-				const v=$('#playback-video');
-				const play=()=>{
-					console.log('trying to play');
-					let playPromise = v.play();
-					if (playPromise !== undefined) {
-						playPromise.then(_ => {
-						}).catch(error => {
-							v.muted=true;
-							v.play().then(()=>{
-								console.log('errorAutoPlayCallback OK');
-							},(error)=>{
-								console.log('errorAutoPlayCallback error again');
-							});
-						});
-					}
-				};
-				const mediaStream=await playback.subscribe();
-				v.srcObject=mediaStream;
-				if(Utils.isSafari){
-					const onStreamChange=()=>{
-						v.srcObject=new MediaStream(mediaStream.getTracks());
-						play();
-					};
-					playback
-						.on('addtrack',onStreamChange)
-						.on('removetrack',onStreamChange);
-				}
-				else if(Utils.isFirefox){
-					v.addEventListener('pause',play)
-				}
-				play();
-			}
-			catch (e) {
-				if(e && ERROR[e.errorId]){
-					alert(ERROR[e.errorId])
-				}
-				console.log(e);
-				if(playback){
-					await playback.close();
-				}
-				return;
-			}
-		}
-		else{
-			const _stream=await Utils.getUserMedia({video:true,audio:true});
-			try {
-				capture = new ConferenceApi({
+                }).on('bitRate',({bitRate,kind})=>{
+                    if(kind==='video'){
+                        br.innerText=Math.round(bitRate).toString();
+                        if(bitRate>0){
+                            br.classList.add('connected');
+                        }
+                        else {
+                            br.classList.remove('connected');
+                        }
+                    }
+                }).on('connectionstatechange',({state})=>{
+                    console.log('connectionstatechange',state);
+                    if(state==='connected'){
+                        connectionBox.classList.add('connected');
+                    }
+                    else {
+                        connectionBox.classList.remove('connected');
+                    }
+                });
+                const v=$('#playback-video');
+                const play=()=>{
+                    console.log('trying to play');
+                    let playPromise = v.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(_ => {
+                        }).catch(error => {
+                            v.muted=true;
+                            v.play().then(()=>{
+                                console.log('errorAutoPlayCallback OK');
+                            },(error)=>{
+                                console.log('errorAutoPlayCallback error again');
+                            });
+                        });
+                    }
+                };
+                const mediaStream=await playback.subscribe();
+                v.srcObject=mediaStream;
+                if(Utils.isSafari){
+                    const onStreamChange=()=>{
+                        v.srcObject=new MediaStream(mediaStream.getTracks());
+                        play();
+                    };
+                    playback
+                        .on('addtrack',onStreamChange)
+                        .on('removetrack',onStreamChange);
+                }
+                else if(Utils.isFirefox){
+                    v.addEventListener('pause',play)
+                }
+                play();
+            }
+            catch (e) {
+                if(e && ERROR[e.errorId]){
+                    alert(ERROR[e.errorId])
+                }
+                console.log(e);
+                if(playback){
+                    await playback.close();
+                }
+                return;
+            }
+        }
+        else{
+            const _stream=await Utils.getUserMedia({video:true,audio:true});
+            try {
+                capture = new ConferenceApi({
+                    kinds,
                     url,worker,
                     stream,
-					token
-				}).on('bitRate',({bitRate,kind})=>{
-					if(kind==='video'){
-						br.innerText=Math.round(bitRate).toString();
-						if(bitRate>0){
-							br.classList.add('connected');
-						}
-						else {
-							br.classList.remove('connected');
-						}
-					}
-				}).on('connectionstatechange',({state})=>{
-					console.log('connectionstatechange',state);
-					if(state==='connected'){
-						connectionBox.classList.add('connected');
-					}
-					else {
-						connectionBox.classList.remove('connected');
-					}
-				});
-				await capture.publish(_stream);
-			}
-			catch (e) {
-				if(e && ERROR[e.errorId]){
-					alert(ERROR[e.errorId])
-				}
-				console.log(e);
-				if(playback){
-					await playback.close();
-				}
-				return;
+                    token
+                }).on('bitRate',({bitRate,kind})=>{
+                    if(kind==='video'){
+                        br.innerText=Math.round(bitRate).toString();
+                        if(bitRate>0){
+                            br.classList.add('connected');
+                        }
+                        else {
+                            br.classList.remove('connected');
+                        }
+                    }
+                }).on('connectionstatechange',({state})=>{
+                    console.log('connectionstatechange',state);
+                    if(state==='connected'){
+                        connectionBox.classList.add('connected');
+                    }
+                    else {
+                        connectionBox.classList.remove('connected');
+                    }
+                });
+                await capture.publish(_stream);
+            }
+            catch (e) {
+                if(e && ERROR[e.errorId]){
+                    alert(ERROR[e.errorId])
+                }
+                console.log(e);
+                if(playback){
+                    await playback.close();
+                }
+                return;
 
-			}
-		}
+            }
+        }
         $('#stop-playing').disabled=false;
     });
 
@@ -146,4 +152,29 @@
             $('#subscribe').disabled=false;
         }
     });
+    const recording=$('#recording');
+    recording.disabled=true;
+    let isRecording=false;
+
+    if(recToken) {
+        const socketApi = new MediasoupSocketApi(url, worker, recToken);
+        socketApi.initSocket().then(() => {
+            recording.disabled = false;
+        });
+        recording.addEventListener('click', async (event)=> {
+            recording.disabled=true;
+            if(isRecording){
+                isRecording=false;
+                await socketApi.stopRecording({stream,kinds});
+                recording.innerText='Start Recording';
+            }
+            else {
+                isRecording=true;
+                await socketApi.startRecording({stream,kinds});
+                recording.innerText='Stop Recording';
+            }
+            recording.disabled=false;
+        });
+    }
+
 })();

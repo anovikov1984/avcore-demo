@@ -10,12 +10,13 @@
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
-
+    const _stream = getParameterByName('stream');
     const url = getParameterByName('url')||'https://rpc.codeda.com';
+    const token=getParameterByName('token')||"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiJzdHJlYW0xIiwib3BlcmF0aW9uIjoiMiIsImlhdCI6MTU5MDE0NjMxNn0.80ImcNlmRsGLoyDNJ8QUK8W-2lygfvlCWdyBf5VDqrl6Q6hE0FnOj_tL0V5X51v1y8Ah2nCgFykBKahhYW04Nw"
     const worker = parseInt(getParameterByName('worker')||'0')||0;
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
-    const api=new MediasoupSocketApi(url,worker,"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiJzdHJlYW0xIiwib3BlcmF0aW9uIjoiMiIsImlhdCI6MTU5MDE0NjMxNn0.80ImcNlmRsGLoyDNJ8QUK8W-2lygfvlCWdyBf5VDqrl6Q6hE0FnOj_tL0V5X51v1y8Ah2nCgFykBKahhYW04Nw")
+    const api=new MediasoupSocketApi(url,worker,token);
     const listStreams=$('#list-streams');
     const streamTable=$('#stream-table');
     const recordingTable=$('#recording-table');
@@ -45,13 +46,20 @@
         tr.appendChild(td1);
         const td2=document.createElement('td');
         const listButton=document.createElement('button');
-        listButton.classList.add('contact-form-btn');
+        if(stream===_stream){
+            listButton.classList.add('contact-form-btn-red');
+
+        }
         listButton.addEventListener('click',async ()=>{
             listButton.disabled=true;
             event.preventDefault();
             const {list}=await api.streamRecordings({stream});
             while(recordingTable.rows.length > 0) {
                 recordingTable.deleteRow(0);
+            }
+            if(list){
+                list.sort();
+                list.reverse();
             }
             while (list && list.length) {
                 addRecordRow(recordingTable,list.shift());
