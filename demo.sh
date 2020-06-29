@@ -25,7 +25,7 @@ STREAM_CALL_1=`uuidgen`
 STREAM_CALL_2=`uuidgen`
 
 TOKEN_VIDEO=`curl -X GET "${SRV}/auth/${STREAM_VIDEO}/1" -H "accept: text/plain" 2>/dev/null`
-TOKEN_RECORDING=`curl -X GET "${SRV}/auth/${STREAM_VIDEO}/2" -H "accept: text/plain" 2>/dev/null`
+TOKEN_RECORDING=`curl -X GET "${SRV}/auth//2" -H "accept: text/plain" 2>/dev/null`
 TOKEN_RTMP=`curl -X GET "${SRV}/auth/${STREAM_RTMP}/3" -H "accept: text/plain" 2>/dev/null`
 TOKEN_CALL_1=`curl -X GET "${SRV}/auth/${STREAM_CALL_1}/1" -H "accept: text/plain" 2>/dev/null`
 TOKEN_CALL_2=`curl -X GET "${SRV}/auth/${STREAM_CALL_2}/1" -H "accept: text/plain" 2>/dev/null`
