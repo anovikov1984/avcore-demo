@@ -53,6 +53,6 @@ echo ""
 
 echo "RTMP:"
 echo ""
-echo "https://avcore-demo.codeda.com/demoRtmp.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP}&token=${TOKEN_RTMP}"
+echo "https://avcore-demo.codeda.com/demoStreaming.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP}&token=${TOKEN_RTMP}"
 echo ""
 echo "https://avcore-demo.codeda.com/demoVideo.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP}&token=${TOKEN_RTMP}"
