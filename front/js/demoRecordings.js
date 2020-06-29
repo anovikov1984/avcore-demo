@@ -19,9 +19,13 @@
     const listStreams=$('#list-streams');
     const streamTable=$('#stream-table');
     const recordingTable=$('#recording-table');
+    listStreams.disabled=true;
+
+    api.initSocket().then(()=>{
+        listStreams.disabled=false;
+    });
 
     listStreams.addEventListener('click', async (event)=> {
-        listStreams.disabled=true;
         event.preventDefault();
         const {list}=await api.recordedStreams();
         while(streamTable.rows.length > 0) {
@@ -32,7 +36,6 @@
         }
         listStreams.disabled=false;
     });
-
     function addStreamRow(table,stream) {
         const tr=document.createElement('tr');
         const td1=document.createElement('td');
