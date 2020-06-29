@@ -67,6 +67,7 @@
                         playPromise.then(_ => {
                         }).catch(error => {
                             v.muted=true;
+                            $('#unmute-playback-video').disabled=false;
                             v.play().then(()=>{
                                 console.log('errorAutoPlayCallback OK');
                             },(error)=>{
@@ -156,6 +157,22 @@
             capture.close();
         }
         $('#subscribe').disabled=false;
+        $('#unmute-playback-video').disabled=true;
+    });
+    $('#unmute-playback-video').addEventListener('click', function (event) {
+        event.preventDefault();
+        const v=$('#playback-video');
+        console.log('muted before',v.muted, v.volume);
+        v.muted=false;
+        v.volume=1;
+        console.log('muted after',v.muted, v.volume);
+        $('#unmute-playback-video').disabled=true;
+    });
+    $('#playback-video').addEventListener('volumechange', function (event) {
+        const v=$('#playback-video');
+        console.log('volumechange',v.muted, v.volume);
+        $('#unmute-playback-video').disabled=!v.muted && v.volume>0.01;
+
     });
     const recording=$('#recording');
     recording.disabled=true;
