@@ -1,5 +1,6 @@
 (async function () {
     const {ConferenceApi,Utils,ERROR}=avcoreClient;
+    const {MediasoupSocketApi}=avcore;
 
     function getParameterByName(name, url) {
         if (!url) url = window.location.href;
@@ -135,8 +136,8 @@
                     alert(ERROR[e.errorId])
                 }
                 console.log(e);
-                if(playback){
-                    await playback.close();
+                if(capture){
+                    await capture.close();
                 }
                 return;
 
@@ -150,6 +151,9 @@
         if(playback) {
             playback.close();
             $('#subscribe').disabled=false;
+        }
+        if(capture){
+            capture.close();
         }
     });
     const recording=$('#recording');
