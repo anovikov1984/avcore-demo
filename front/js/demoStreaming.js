@@ -24,8 +24,12 @@
     const connectionBox=$('#connection-box');
     const conferenceIds={};
     const socketApi=new MediasoupSocketApi(url,worker,token);
-    socketApi.initSocket();
-    $('#subscribe').addEventListener('click', async (event)=> {
+    const subscribe=$('#subscribe');
+    subscribe.disabled=true;
+    socketApi.initSocket().then(()=>{
+        subscribe.disabled=false;
+    });
+    subscribe.addEventListener('click', async (event)=> {
         $('#subscribe').disabled=true;
         event.preventDefault();
         let isError=false;
