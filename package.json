@@ -14,13 +14,20 @@
   },
   "dependencies": {
     "avcore": "git+ssh://git@github.com/anovikov1984/avcore.git",
+    "body-parser": "^1.18.3",
     "console-stamp": "^0.2.9",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "router": "^1.3.4"
   },
   "scripts": {
     "update-avcore": "npm update avcore -f",
-    "start": "ts-node ./avcoreDemoServer.ts",
-    "test": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log &"
+    "start": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log 2>&1 &",
+    "service": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log 2>&1",
+    "test": "ts-node ./avcoreDemoServer.ts",
+    "log": "tail -f ~/avcoreDemoServer.log -n 1000",
+    "kill": "for i in $( ps ax | awk '/avcoreDemoServer.ts/ {print $1}' ); do kill ${i}; done",
+    "copylog": "if [ -f ~/avcoreDemoServer.log ]; then cp ~/avcoreDemoServer.log ~/avcoreDemoServer-$(date +%Y-%m-%d-%H-%M).log; fi",
+    "restart": "npm run kill;npm run copylog;npm start"
   }
 }

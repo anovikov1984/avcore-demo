@@ -35,12 +35,12 @@
         let isError=false;
         try{
             await socketApi.stopFileStreaming({stream});
-            const rtmpUrl = getParameterByName('rtmpUrl');
+            const liveUrl = getParameterByName('rtmpUrl')||getParameterByName('liveUrl');
             const filePath = getParameterByName('filePath')||'https://codeda.com/data/syncTest.mp4';
             const {kinds}=await socketApi.kindsByFile({filePath:rtmpUrl||filePath});
             //const kinds=['audio','video'];
-            if(rtmpUrl){
-                await socketApi.rtmpStreaming({kinds,stream,rtmpUrl,videoBitrate:'4000'});
+            if(liveUrl){
+                await socketApi.liveStreaming({kinds,stream,url: liveUrl,videoBitrate:'4000'});
             }
             else {
                 await socketApi.fileStreaming({kinds,stream,filePath,videoBitrate:'4000'});
