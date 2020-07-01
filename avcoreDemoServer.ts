@@ -7,6 +7,10 @@ import {json as jsonBodyParser} from "body-parser";
 import * as router from 'router';
 import {STAT} from 'avcore';
 const PORT=9099;
+const STAT_TYPE={
+    [STAT.TRAFFIC]:0,
+    [STAT.CPU]:1,
+};
 console_stamp(console, '[HH:MM:ss.l]');
 const app = express();
 app.use(cors());
@@ -15,9 +19,9 @@ app.use('/client/dist',express.static(join(__dirname,'node_modules/avcore/client
 app.use('/dist',express.static(join(__dirname,'node_modules/avcore/dist')));
 app.use(jsonBodyParser());
 app.use(router());
-app.post(`/${STAT.STATS}/${STAT.TRAFFIC}`,(req,res)=>{
+app.post(`/${STAT.STATS}/:type`,(req,res)=>{
     res.send({success:true});
-    console.log(req.body);
+    console.log({...req.body,type:STAT_TYPE[req.params.type]});
 });
 const server = createServer(app);
 server.listen(PORT, () => {
