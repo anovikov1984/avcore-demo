@@ -37,7 +37,7 @@
             await socketApi.stopFileStreaming({stream});
             const liveUrl = getParameterByName('rtmpUrl')||getParameterByName('liveUrl');
             const filePath = getParameterByName('filePath')||'https://codeda.com/data/syncTest.mp4';
-            const {kinds}=await socketApi.kindsByFile({filePath:rtmpUrl||filePath});
+            const {kinds}=await socketApi.kindsByFile({filePath:liveUrl||filePath});
             //const kinds=['audio','video'];
             if(liveUrl){
                 await socketApi.liveStreaming({kinds,stream,url: liveUrl,videoBitrate:'4000'});
