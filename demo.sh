@@ -9,6 +9,7 @@ if [[ -z "$2" ]]
         RTMP_APP='rtmp://codeda.com/live/'
       else
         RTMP_APP=$2
+      fi
 if [[ -z "$3" ]]
       then
         WORKER=0
