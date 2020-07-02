@@ -1,16 +1,21 @@
 #!/bin/bash
 if [[ $# -lt 1 ]]
 then
-    echo "Usage: ./demo.sh url [worker] [simulcast]" >&2
+    echo "Usage: ./demo.sh url [rtmpApp] [worker] [simulcast]" >&2
     exit 1
 fi
 if [[ -z "$2" ]]
       then
+        RTMP_APP='rtmp://codeda.com/live/'
+      else
+        RTMP_APP=$2
+if [[ -z "$3" ]]
+      then
         WORKER=0
       else
-        WORKER=$2
+        WORKER=$3
     fi
-if [[ -z "$3" ]]
+if [[ -z "$4" ]]
       then
         SIMULCAST=""
       else
@@ -52,9 +57,9 @@ echo "https://avcore-demo.codeda.com/demoCall.html?url=${SRV}&worker=${WORKER}&s
 echo ""
 
 echo "RTMP:"
-echo "url: rtmp://codeda.com/live/"
+echo "url: ${RTMP_APP}"
 echo "key: ${STREAM_RTMP}"
 echo ""
-echo "https://avcore-demo.codeda.com/demoStreaming.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP}&token=${TOKEN_RTMP}&rtmpUrl=rtmp://127.0.0.1/live/${STREAM_RTMP}"
+echo "https://avcore-demo.codeda.com/demoStreaming.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP}&token=${TOKEN_RTMP}&rtmpUrl=${RTMP_APP}${STREAM_RTMP}"
 echo ""
 echo "https://avcore-demo.codeda.com/demoVideo.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP}&token=${TOKEN_RTMP}&listen=true"
