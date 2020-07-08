@@ -11,6 +11,8 @@
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
+    const $ = document.querySelector.bind(document);
+    const $$ = document.querySelectorAll.bind(document);
     const streamIn = getParameterByName('streamIn');
     const tokenIn = getParameterByName('tokenIn');
     const streamOut = getParameterByName('streamOut');
@@ -30,8 +32,7 @@
         mixerButtonContainers.forEach(c=>c.style.display='');
         mixerButton.disabled=false;
     }
-    const $ = document.querySelector.bind(document);
-    const $$ = document.querySelectorAll.bind(document);
+
     let playback,capture;
     $('#subscribe').addEventListener('click', async (event)=> {
         $('#subscribe').disabled=true;
