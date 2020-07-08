@@ -175,6 +175,11 @@
     });
     let api;
     let mixerId;
+    window.onbeforeunload = async function(e) {
+        if(mixerId) {
+            await api.mixerClose({mixerId});
+        }
+    };
     mixerButton.addEventListener('click', async function (event) {
         event.preventDefault();
         mixerButton.disabled=true;
@@ -187,13 +192,18 @@
             await api.mixerClose({mixerId});
             mixerButton.innerText='Start Mixer';
             mixerId=null;
-
+            mixerLivePipeId=null;
+            mixerRecPipeId=null;
+            mixerRtmpPipeId=null;
+            mixerLiveButton.innerText='Start Mixer Live';
+            mixerRtmpButton.innerText='Start Mixer RTMP';
+            mixerRecButton.innerText='Start Mixer Recording';
         }
         else {
             const res=await api.mixerStart();
             mixerId=res.mixerId;
-            await api.mixerAdd({mixerId,stream:streamIn,options:{x:0,y:0,width:640,height:480}});
-            await api.mixerAdd({mixerId,stream:streamOut,options:{x:640,y:0,width:640,height:480}});
+            await api.mixerAdd({mixerId,stream:streamIn,options:{x:0,y:0,width:640,height:480,z:0}});
+            await api.mixerAdd({mixerId,stream:streamOut,options:{x:640,y:0,width:640,height:480,z:0}});
             mixerButton.innerText='Stop Mixer';
             mixerButtons.forEach(b=>b.disabled=false);
         }
@@ -211,7 +221,6 @@
                 await api.mixerPipeStop({mixerId,pipeId:mixerLivePipeId});
                 mixerLiveButton.innerText='Start Mixer Live';
                 mixerLivePipeId=null;
-
             }
             else {
                 const res=await api.mixerPipeStart({mixerId,type:MIXER_PIPE_TYPE.LIVE});
