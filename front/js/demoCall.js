@@ -227,7 +227,7 @@
                 mixerLivePipeId=null;
             }
             else {
-                const res=await api.mixerPipeStart({mixerId,type:MIXER_PIPE_TYPE.LIVE});
+                const res=await api.mixerPipeStart({mixerId,type:MIXER_PIPE_TYPE.LIVE,stream:streamMixer});
                 mixerLivePipeId=res.pipeId;
                 mixerLiveButton.innerText='Stop Mixer Live';
             }
