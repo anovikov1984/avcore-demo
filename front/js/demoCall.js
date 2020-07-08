@@ -180,7 +180,7 @@
         mixerButton.disabled=true;
         mixerButtons.forEach(b=>b.disabled=true);
         if(!api){
-            api = new MediasoupSocketApi(url, worker, recToken);
+            api = new MediasoupSocketApi(url, worker, tokenMixer);
             await api.initSocket();
         }
         if(mixerId){
