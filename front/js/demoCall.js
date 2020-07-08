@@ -202,8 +202,12 @@
         else {
             const res=await api.mixerStart();
             mixerId=res.mixerId;
-            await api.mixerAdd({mixerId,stream:streamIn,options:{x:0,y:0,width:640,height:480,z:0}});
-            await api.mixerAdd({mixerId,stream:streamOut,options:{x:640,y:0,width:640,height:480,z:0}});
+            await Promise.all([
+                api.mixerAdd({mixerId,stream:streamIn,kind:'audio'}),
+                api.mixerAdd({mixerId,stream:streamOut,kind:'audio'}),
+                api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:640,height:480,z:0}}),
+                api.mixerAdd({mixerId,stream:streamOut,kind:'video',options:{x:640,y:0,width:640,height:480,z:0}})
+            ]);
             mixerButton.innerText='Stop Mixer';
             mixerButtons.forEach(b=>b.disabled=false);
         }
