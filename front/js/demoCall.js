@@ -192,6 +192,8 @@
         else {
             const res=await api.mixerStart();
             mixerId=res.mixerId;
+            await api.mixerAdd({mixerId,stream:streamIn,options:{x:0,y:0,width:640,height:480}});
+            await api.mixerAdd({mixerId,stream:streamOut,options:{x:640,y:0,width:640,height:480}});
             mixerButton.innerText='Stop Mixer';
             mixerButtons.forEach(b=>b.disabled=false);
         }
