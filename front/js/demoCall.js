@@ -31,6 +31,11 @@
     if(streamMixer && tokenMixer){
         mixerButtonContainers.forEach(c=>c.style.display='');
         mixerButton.disabled=false;
+        window.onbeforeunload = async function(e) {
+            if(mixerId) {
+                await api.mixerClose({mixerId});
+            }
+        };
     }
 
     let playback,capture;
@@ -175,11 +180,6 @@
     });
     let api;
     let mixerId;
-    window.onbeforeunload = async function(e) {
-        if(mixerId) {
-            await api.mixerClose({mixerId});
-        }
-    };
     mixerButton.addEventListener('click', async function (event) {
         event.preventDefault();
         mixerButton.disabled=true;
