@@ -26,7 +26,7 @@
     const tokenMixer = getParameterByName('tokenMixer');
     const mixerButton=$('#mixer');
     const mixerButtons=$$('.mixer-button');
-    const mixerButtonContainers=$$('.mixer-button');
+    const mixerButtonContainers=$$('.mixer-button-container');
     mixerButtonContainers.forEach(c=>c.style.display='none');
     if(streamMixer && tokenMixer){
         mixerButtonContainers.forEach(c=>c.style.display='');
