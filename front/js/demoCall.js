@@ -282,7 +282,7 @@
 
             }
             else {
-                const res=await api.mixerPipeStart({mixerId,type:MIXER_PIPE_TYPE.RTMP,url:`${$('#rtmp-url').value}/${$('#rtmp-key').value}`});
+                const res=await api.mixerPipeStart({mixerId,type:MIXER_PIPE_TYPE.RTMP,url:`${$('#rtmp-url').value}/${$('#rtmp-key').value}`.replace(/([^:])\/\//gi,'$1/')});
                 mixerRtmpPipeId=res.pipeId;
                 mixerRtmpButton.innerText='Stop Mixer RTMP';
             }
