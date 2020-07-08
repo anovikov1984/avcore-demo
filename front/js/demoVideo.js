@@ -1,6 +1,6 @@
 (async function () {
-    const {ConferenceApi,Utils,ERROR}=avcoreClient;
-    const {MediasoupSocketApi}=avcore;
+    const {ConferenceApi,Utils}=avcoreClient;
+    const {MediasoupSocketApi,ERROR}=avcore;
 
     function getParameterByName(name, url) {
         if (!url) url = window.location.href;

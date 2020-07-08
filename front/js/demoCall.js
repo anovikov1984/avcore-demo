@@ -1,5 +1,6 @@
 (async function () {
-    const {ConferenceApi,Utils,ERROR}=avcoreClient;
+    const {MediasoupSocketApi,ERROR,MIXER_PIPE_TYPE}=avcore;
+    const {ConferenceApi,Utils}=avcoreClient;
 
     function getParameterByName(name, url) {
         if (!url) url = window.location.href;
@@ -19,7 +20,16 @@
     const worker = parseInt(getParameterByName('worker')||'0')||0;
     const kindsParam=getParameterByName('kinds');
     const kinds=(kindsParam && kindsParam.split(',')) || ['video','audio'];
-
+    const streamMixer = getParameterByName('streamMixer');
+    const tokenMixer = getParameterByName('tokenMixer');
+    const mixerButton=$('#mixer');
+    const mixerButtons=$$('.mixer-button');
+    const mixerButtonContainers=$$('.mixer-button');
+    mixerButtonContainers.forEach(c=>c.style.display='none');
+    if(streamMixer && tokenMixer){
+        mixerButtonContainers.forEach(c=>c.style.display='');
+        mixerButton.disabled=false;
+    }
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     let playback,capture;
@@ -162,4 +172,107 @@
         console.log('muted after',v.muted, v.volume);
         $('#unmute-playback-video').disabled=true;
     });
+    let api;
+    let mixerId;
+    mixerButton.addEventListener('click', async function (event) {
+        event.preventDefault();
+        mixerButton.disabled=true;
+        mixerButtons.forEach(b=>b.disabled=true);
+        if(!api){
+            api = new MediasoupSocketApi(url, worker, recToken);
+            await api.initSocket();
+        }
+        if(mixerId){
+            await api.mixerClose({mixerId});
+            mixerButton.innerText='Start Mixer';
+            mixerId=null;
+
+        }
+        else {
+            const res=await api.mixerStart();
+            mixerId=res.mixerId;
+            mixerButton.innerText='Stop Mixer';
+            mixerButtons.forEach(b=>b.disabled=false);
+        }
+        mixerButton.disabled=false;
+
+    });
+    let mixerLivePipeId;
+    const mixerLiveButton=$('#mixer-live');
+    mixerLiveButton.addEventListener('click', async function (event) {
+        event.preventDefault();
+        if(mixerId){
+            mixerButton.disabled=true;
+            mixerButtons.forEach(b=>b.disabled=true);
+            if(mixerLivePipeId){
+                await api.mixerPipeStop({mixerId,pipeId:mixerLivePipeId});
+                mixerLiveButton.innerText='Start Mixer Live';
+                mixerLivePipeId=null;
+
+            }
+            else {
+                const res=await api.mixerPipeStart({mixerId,type:MIXER_PIPE_TYPE.LIVE});
+                mixerLivePipeId=res.pipeId;
+                mixerLiveButton.innerText='Stop Mixer Live';
+            }
+            mixerButtons.forEach(b=>b.disabled=false);
+            mixerButton.disabled=false;
+        }
+    });
+
+    const adminRecButton=$('#rec-admin');
+    let lastRecording;
+    adminRecButton.addEventListener('click', async function (event) {
+        if(lastRecording){
+            window.open(`demoRecordings.html?url=${url}&stream=${lastRecording}`, '_blank')
+        }
+    });
+    let mixerRecPipeId;
+    const mixerRecButton=$('#mixer-rec');
+    mixerRecButton.addEventListener('click', async function (event) {
+        event.preventDefault();
+        if(mixerId){
+            mixerButton.disabled=true;
+            mixerButtons.forEach(b=>b.disabled=true);
+            if(mixerRecPipeId){
+                await api.mixerPipeStop({mixerId,pipeId:mixerRecPipeId});
+                mixerRecButton.innerText='Start Mixer Recording';
+                lastRecording=mixerRecPipeId;
+                adminRecButton.disabled=false;
+                mixerRecPipeId=null;
+
+            }
+            else {
+                const res=await api.mixerPipeStart({mixerId,type:MIXER_PIPE_TYPE.RECORDING});
+                mixerRecPipeId=res.pipeId;
+                mixerRecButton.innerText='Stop Mixer Recording';
+            }
+            mixerButtons.forEach(b=>b.disabled=false);
+            mixerButton.disabled=false;
+        }
+    });
+
+    let mixerRtmpPipeId;
+    const mixerRtmpButton=$('#mixer-rtmp');
+    mixerRtmpButton.addEventListener('click', async function (event) {
+        event.preventDefault();
+        if(mixerId){
+            mixerButton.disabled=true;
+            mixerButtons.forEach(b=>b.disabled=true);
+            if(mixerRtmpPipeId){
+                await api.mixerPipeStop({mixerId,pipeId:mixerRtmpPipeId});
+                mixerRtmpButton.innerText='Start Mixer RTMP';
+                mixerRtmpPipeId=null;
+
+            }
+            else {
+                const res=await api.mixerPipeStart({mixerId,type:MIXER_PIPE_TYPE.RTMP,url:`${$('#rtmp-url').value}/${$('#rtmp-key').value}`});
+                mixerRtmpPipeId=res.pipeId;
+                mixerRtmpButton.innerText='Stop Mixer RTMP';
+            }
+            mixerButtons.forEach(b=>b.disabled=false);
+            mixerButton.disabled=false;
+        }
+    });
+
 })();

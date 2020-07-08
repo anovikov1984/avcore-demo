@@ -1,5 +1,6 @@
 (async function () {
-    const {ConferenceApi,Utils,ERROR}=avcoreClient;
+    const {ConferenceApi,Utils}=avcoreClient;
+    const {ERROR}=avcore;
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     const url='https://rpc.codeda.com';

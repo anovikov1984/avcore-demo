@@ -10,8 +10,8 @@
     }
     const url = getParameterByName('url')||'https://rpc.codeda.com';
     const worker = parseInt(getParameterByName('worker')||'0')||0;
-    const {ConferenceApi,Utils,ERROR}=avcoreClient;
-    const {MediasoupSocketApi}=avcore;
+    const {ConferenceApi,Utils}=avcoreClient;
+    const {MediasoupSocketApi,ERROR}=avcore;
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     const streamTable=$('#streamTable');

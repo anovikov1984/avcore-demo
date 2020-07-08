@@ -29,12 +29,14 @@ STREAM_VIDEO=`uuidgen`
 STREAM_RTMP=`uuidgen`
 STREAM_CALL_1=`uuidgen`
 STREAM_CALL_2=`uuidgen`
+STREAM_CALL_MIXER=`uuidgen`
 
 TOKEN_VIDEO=`curl -X GET "${SRV}/auth/${STREAM_VIDEO}/1" -H "accept: text/plain" 2>/dev/null`
 TOKEN_RECORDING=`curl -X GET "${SRV}/auth/2" -H "accept: text/plain" 2>/dev/null`
 TOKEN_RTMP=`curl -X GET "${SRV}/auth/${STREAM_RTMP}/3" -H "accept: text/plain" 2>/dev/null`
 TOKEN_CALL_1=`curl -X GET "${SRV}/auth/${STREAM_CALL_1}/1" -H "accept: text/plain" 2>/dev/null`
 TOKEN_CALL_2=`curl -X GET "${SRV}/auth/${STREAM_CALL_2}/1" -H "accept: text/plain" 2>/dev/null`
+TOKEN_CALL_MIXER=`curl -X GET "${SRV}/auth/${STREAM_CALL_MIXER}/4" -H "accept: text/plain" 2>/dev/null`
 
 echo "Publish:"
 echo ""
@@ -52,10 +54,12 @@ echo ""
 
 echo "Call:"
 echo ""
-echo "https://avcore-demo.codeda.com/demoCall.html?url=${SRV}&worker=${WORKER}&streamOut=${STREAM_CALL_1}&tokenOut=${TOKEN_CALL_1}&streamIn=${STREAM_CALL_2}&tokenIn=${TOKEN_CALL_2}${SIMULCAST}"
+echo "https://avcore-demo.codeda.com/demoCall.html?url=${SRV}&worker=${WORKER}&streamOut=${STREAM_CALL_1}&tokenOut=${TOKEN_CALL_1}&streamIn=${STREAM_CALL_2}&tokenIn=${TOKEN_CALL_2}&streamMixer=${STREAM_CALL_MIXER}&tokenMixer=${TOKEN_CALL_MIXER}${SIMULCAST}"
 echo ""
 echo "https://avcore-demo.codeda.com/demoCall.html?url=${SRV}&worker=${WORKER}&streamOut=${STREAM_CALL_2}&tokenOut=${TOKEN_CALL_2}&streamIn=${STREAM_CALL_1}&tokenIn=${TOKEN_CALL_1}${SIMULCAST}"
 echo ""
+echo "Call Mixer:"
+echo "https://avcore-demo.codeda.com/demoVideo.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_CALL_MIXER}&token=${TOKEN_CALL_MIXER}&listen=true"
 
 echo "RTMP:"
 echo "url: ${RTMP_APP}"
