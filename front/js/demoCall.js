@@ -193,7 +193,11 @@
             mixerButton.innerText='Start Mixer';
             mixerId=null;
             mixerLivePipeId=null;
-            mixerRecPipeId=null;
+            if(mixerRecPipeId){
+                lastRecording=mixerRecPipeId;
+                adminRecButton.disabled=false;
+                mixerRecPipeId=null;
+            }
             mixerRtmpPipeId=null;
             mixerLiveButton.innerText='Start Mixer Live';
             mixerRtmpButton.innerText='Start Mixer RTMP';
