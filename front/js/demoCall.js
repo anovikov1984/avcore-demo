@@ -50,8 +50,7 @@
                 url,worker,
                 kinds,
                 token:tokenIn,
-                stream:streamIn,
-                simulcast
+                stream:streamIn
             }).on('bitRate',({bitRate,kind})=>{
                 if(kind==='video'){
                     brIn.innerText='↓ '+Math.round(bitRate).toString();
@@ -120,7 +119,8 @@
             capture = new ConferenceApi({
                 url,worker,
                 stream:streamOut,
-                token:tokenOut
+                token:tokenOut,
+                simulcast
             }).on('bitRate',({bitRate,kind})=>{
                 if(kind==='video'){
                     brOut.innerText='↑ '+Math.round(bitRate).toString();
