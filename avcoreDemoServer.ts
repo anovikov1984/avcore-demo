@@ -7,6 +7,7 @@ import {join} from "path";
 import {json as jsonBodyParser} from "body-parser";
 import * as router from 'router';
 import {STAT} from 'avcore';
+import {loadTestAudio} from './tests/load-test-audio';
 const PORT=9099;
 const STAT_TYPE={
     [STAT.TRAFFIC]:0,
@@ -69,3 +70,4 @@ connectMongo().then(()=>{
     });
 }).catch(()=>{
 });
+loadTestAudio().then(()=>{}).catch(()=>{});
