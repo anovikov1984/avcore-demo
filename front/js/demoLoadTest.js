@@ -27,7 +27,6 @@
     if(originUrl){
         origin={url:originUrl, worker:originWorker, token:originToken||token}
     }
-    console.log(`worker is ${worker}`);
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     let playbacks=[];
@@ -42,6 +41,7 @@
             const d=Date.now();
             for(let i=0;i<num;i++) {
                 const worker = workerStr==='random'?Math.floor(Math.random()*numServers*workerPerServer):parseInt(workerStr)||0;
+                console.log(`worker is ${worker}`);
                 let connected=false;
                 playbacks[i] = new ConferenceApi({
                     url, worker,
