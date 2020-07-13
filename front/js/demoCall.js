@@ -125,14 +125,12 @@
                 token:tokenOut,
                 simulcast
             }).on('bitRate',({bitRate,kind})=>{
-                if(kind==='video'){
-                    brOut[kind].innerText='↑ '+Math.round(bitRate).toString();
-                    if(bitRate>0){
-                        brOut[kind].classList.add('connected');
-                    }
-                    else {
-                        brOut[kind].classList.remove('connected');
-                    }
+                brOut[kind].innerText='↑ '+Math.round(bitRate).toString();
+                if(bitRate>0){
+                    brOut[kind].classList.add('connected');
+                }
+                else {
+                    brOut[kind].classList.remove('connected');
                 }
             }).on('connectionstatechange',({state})=>{
                 console.log('connectionstatechange',state);
