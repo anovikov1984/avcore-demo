@@ -112,7 +112,13 @@
             }
         }
         else{
-            const _stream=await Utils.getUserMedia({video:true,audio:true},b.id==='screen-share');
+            let isScreen=b.id==='screen-share';
+            let mediaStream=await Utils.getUserMedia({video:kinds.includes('video'),audio:kinds.includes('audio') && b.id!=='screen-share'},b.id==='screen-share');
+            if(isScreen && kinds.includes('audio')){
+                const _stream=await Utils.getUserMedia({video:false,audio:true});
+                mediaStream=new MediaStream([...mediaStream.getTracks(),..._stream.getTracks()]);
+            }
+
             try {
                 capture = new ConferenceApi({
                     kinds,

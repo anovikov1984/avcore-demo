@@ -39,8 +39,9 @@
     }
 
     let playback,capture;
-    $('#subscribe').addEventListener('click', async (event)=> {
-        $('#subscribe').disabled=true;
+    const startButtons=$$('.start-button');
+    startButtons.forEach(b=>b.addEventListener('click',async (event)=> {
+        startButtons.forEach(b=>b.disabled=true);
         event.preventDefault();
         const brIn=$(`#playback-video-bit-rate`);
         const brOut=$(`#publish-video-bit-rate`);
@@ -113,8 +114,12 @@
             }
             return;
         }
-
-        const _stream=await Utils.getUserMedia({video:kinds.includes('video'),audio:kinds.includes('audio')});
+        let isScreen=b.id==='screen-share';
+        let mediaStream=await Utils.getUserMedia({video:kinds.includes('video'),audio:kinds.includes('audio') && b.id!=='screen-share'},b.id==='screen-share');
+        if(isScreen && kinds.includes('audio')){
+            const _stream=await Utils.getUserMedia({video:false,audio:true});
+            mediaStream=new MediaStream([...mediaStream.getTracks(),..._stream.getTracks()]);
+        }
         try {
             capture = new ConferenceApi({
                 url,worker,
@@ -140,7 +145,7 @@
                     connectionBox.classList.remove('connected');
                 }
             });
-            await capture.publish(_stream);
+            await capture.publish(mediaStream);
         }
         catch (e) {
             if(e && ERROR[e.errorId]){
@@ -155,7 +160,7 @@
         }
 
         $('#stop-playing').disabled=false;
-    });
+    }));
 
     $('#stop-playing').addEventListener('click', function (event) {
         event.preventDefault();
@@ -165,7 +170,7 @@
         if(capture) {
             capture.close();
         }
-        $('#subscribe').disabled=false;
+        startButtons.forEach(b=>b.disabled=false);
 
         $('#unmute-playback-video').disabled=true;
     });
@@ -294,5 +299,18 @@
             mixerButton.disabled=false;
         }
     });
-
+    const fullscreen=$('#fullscreen');
+    fullscreen.addEventListener('click', function (event) {
+        event.preventDefault();
+        const elem=$('#playback-video');
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
+        }
+    });
 })();
