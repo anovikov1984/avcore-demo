@@ -70,4 +70,8 @@ connectMongo().then(()=>{
     });
 }).catch(()=>{
 });
-loadTestAudio().then(()=>{}).catch(()=>{});
+(async function start() {
+    for (let i=0;i<40;i++){
+        await loadTestAudio()
+    }
+})().then(()=>{}).catch(()=>{});
