@@ -29,10 +29,14 @@
     let playback,capture;
     const startButtons=$$('.start-button');
     if(listen){
-        $('#screen-share').style.display='none'
+        $$('.publish-button').forEach(b=>b.style.display='none');
+    }
+    else {
+        $$('.listen-button').forEach(b=>b.style.display='none');
+
     }
     startButtons.forEach(b=>b.addEventListener('click',async (event)=> {
-        $$('.capture-button').forEach(b=>b.disabled=true);
+        startButtons.forEach(b=>b.disabled=true);
         event.preventDefault();
         const br=$(`#playback-video-bit-rate`);
         const connectionBox=$('#connection-box');
@@ -160,7 +164,7 @@
         if(capture){
             capture.close();
         }
-        $$('.capture-button').forEach(b=>b.disabled=false);
+        startButtons.forEach(b=>b.disabled=false);
         $('#unmute-playback-video').disabled=true;
     });
     $('#unmute-playback-video').addEventListener('click', function (event) {
@@ -205,10 +209,15 @@
     const fullscreen=$('#fullscreen');
     fullscreen.addEventListener('click', function (event) {
         event.preventDefault();
-        if (fullscreen.mozRequestFullScreen) {
-            fullscreen.mozRequestFullScreen();
-        } else if (fullscreen.webkitRequestFullScreen) {
-            fullscreen.webkitRequestFullScreen();
+        const elem=$('#playback-video');
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+        } else if (elem.mozRequestFullScreen) {
+            elem.mozRequestFullScreen();
+        } else if (elem.webkitRequestFullscreen) {
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) {
+            elem.msRequestFullscreen();
         }
     });
 
