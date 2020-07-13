@@ -27,8 +27,12 @@
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     let playback,capture;
-    $('#subscribe').addEventListener('click', async (event)=> {
-        $('#subscribe').disabled=true;
+    const startButtons=$$('.start-button');
+    if(listen){
+        $('#screen-share').style.display='none'
+    }
+    startButtons.forEach(b=>b.addEventListener('click',async (event)=> {
+        $$('.capture-button').forEach(b=>b.disabled=true);
         event.preventDefault();
         const br=$(`#playback-video-bit-rate`);
         const connectionBox=$('#connection-box');
@@ -104,7 +108,7 @@
             }
         }
         else{
-            const _stream=await Utils.getUserMedia({video:true,audio:true});
+            const _stream=await Utils.getUserMedia({video:true,audio:true},b.id==='screen-share');
             try {
                 capture = new ConferenceApi({
                     kinds,
@@ -145,7 +149,7 @@
             }
         }
         $('#stop-playing').disabled=false;
-    });
+    }));
 
     $('#stop-playing').addEventListener('click', function (event) {
         event.preventDefault();
@@ -156,7 +160,7 @@
         if(capture){
             capture.close();
         }
-        $('#subscribe').disabled=false;
+        $$('.capture-button').forEach(b=>b.disabled=false);
         $('#unmute-playback-video').disabled=true;
     });
     $('#unmute-playback-video').addEventListener('click', function (event) {
@@ -198,5 +202,15 @@
             recording.disabled=false;
         });
     }
+    const fullscreen=$('#fullscreen');
+    fullscreen.addEventListener('click', function (event) {
+        event.preventDefault();
+        if (fullscreen.mozRequestFullScreen) {
+            fullscreen.mozRequestFullScreen();
+        } else if (fullscreen.webkitRequestFullScreen) {
+            fullscreen.webkitRequestFullScreen();
+        }
+    });
+
 
 })();
