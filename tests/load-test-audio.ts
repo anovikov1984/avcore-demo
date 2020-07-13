@@ -16,8 +16,12 @@ export async function loadTestAudio() {
     });
     let page:Page = await browser.newPage();
     page.on('console', msg => {
-        for (let i = 0; i < msg.args().length; ++i)
-            console.log('browser',`${i}: ${msg.args()[i]}`);
+        const args=msg.args();
+
+        for (let i = 0; i < args.length; ++i)
+            if(i>0 && msg.args()[i-1] && args[i-1].toString().indexOf('ADDTRACK')>-1){
+                console.log(args[i]);
+            }
     });
     const onError=msg => console.log('browser', 'error', msg);
     page.on('pageerror', onError);
