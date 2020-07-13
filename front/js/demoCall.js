@@ -163,6 +163,7 @@
     }));
 
     $('#stop-playing').addEventListener('click', function (event) {
+        $('#stop-playing').disabled=true;
         event.preventDefault();
         if(playback) {
             playback.close();
