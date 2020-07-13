@@ -43,8 +43,8 @@
     startButtons.forEach(b=>b.addEventListener('click',async (event)=> {
         startButtons.forEach(b=>b.disabled=true);
         event.preventDefault();
-        const brIn=$(`#playback-video-bit-rate`);
-        const brOut=$(`#publish-video-bit-rate`);
+        const brIn={video:$(`#playback-video-bit-rate`),audio:$(`#playback-audio-bit-rate`)};
+        const brOut={video:$(`#publish-video-bit-rate`),audio:$(`#publish-audio-bit-rate`)};
         const connectionBox=$('#connection-box');
         try {
             playback = new ConferenceApi({
@@ -53,14 +53,12 @@
                 token:tokenIn,
                 stream:streamIn
             }).on('bitRate',({bitRate,kind})=>{
-                if(kind==='video'){
-                    brIn.innerText='↓ '+Math.round(bitRate).toString();
-                    if(bitRate>0){
-                        brIn.classList.add('connected');
-                    }
-                    else {
-                        brIn.classList.remove('connected');
-                    }
+                brIn[kind].innerText='↓ '+Math.round(bitRate).toString();
+                if(bitRate>0){
+                    brIn[kind].classList.add('connected');
+                }
+                else {
+                    brIn[kind].classList.remove('connected');
                 }
             }).on('connectionstatechange',({state})=>{
                 console.log('connectionstatechange',state);
@@ -128,12 +126,12 @@
                 simulcast
             }).on('bitRate',({bitRate,kind})=>{
                 if(kind==='video'){
-                    brOut.innerText='↑ '+Math.round(bitRate).toString();
+                    brOut[kind].innerText='↑ '+Math.round(bitRate).toString();
                     if(bitRate>0){
-                        brOut.classList.add('connected');
+                        brOut[kind].classList.add('connected');
                     }
                     else {
-                        brOut.classList.remove('connected');
+                        brOut[kind].classList.remove('connected');
                     }
                 }
             }).on('connectionstatechange',({state})=>{
