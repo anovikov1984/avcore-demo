@@ -26,7 +26,7 @@ export async function loadTestAudio() {
                 dalays.push(parseInt(num));
                 const sum = dalays.reduce((a, b) => a + b, 0);
                 const avg = (sum / dalays.length) || 0;
-                console.log(`avg: ${avg} min: ${Math.min(...dalays)}  max: ${Math.max(...dalays)}`);
+                console.log(`num: ${dalays.length} avg: ${avg} min: ${Math.min(...dalays)}  max: ${Math.max(...dalays)}`);
             }
             else{
                 console.info(args[i].toString());
