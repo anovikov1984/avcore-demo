@@ -22,10 +22,10 @@
     const num = getParameterByName('num')||1;
     const worker = workerStr==='random'?Math.floor(Math.random()*numServers*workerPerServer):parseInt(workerStr)||0;
     let origin;
-    const originStream = getParameterByName('originStream');
     const originToken = getParameterByName('originToken');
-    if(originStream && originToken){
-        origin={stream:originStream, token:originToken}
+    const originUrl = getParameterByName('originUrl');
+    if(originUrl){
+        origin={url:originUrl, token:originToken||token}
     }
     console.log(`worker is ${worker}`);
     const $ = document.querySelector.bind(document);
