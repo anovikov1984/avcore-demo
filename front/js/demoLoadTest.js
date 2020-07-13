@@ -24,8 +24,9 @@
     let origin;
     const originToken = getParameterByName('originToken');
     const originUrl = getParameterByName('originUrl');
+    const originWorker = getParameterByName('originWorker')||0;
     if(originUrl){
-        origin={url:originUrl, token:originToken||token}
+        origin={url:originUrl, worker:originWorker, token:originToken||token}
     }
     console.log(`worker is ${worker}`);
     const $ = document.querySelector.bind(document);
