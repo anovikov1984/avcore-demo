@@ -20,7 +20,6 @@
     const workerPerServer=4;
     const numServers=1;
     const num = getParameterByName('num')||1;
-    const worker = workerStr==='random'?Math.floor(Math.random()*numServers*workerPerServer):parseInt(workerStr)||0;
     let origin;
     const originToken = getParameterByName('originToken');
     const originUrl = getParameterByName('originUrl');
@@ -42,6 +41,7 @@
             const promises=[];
             const d=Date.now();
             for(let i=0;i<num;i++) {
+                const worker = workerStr==='random'?Math.floor(Math.random()*numServers*workerPerServer):parseInt(workerStr)||0;
                 let connected=false;
                 playbacks[i] = new ConferenceApi({
                     url, worker,
