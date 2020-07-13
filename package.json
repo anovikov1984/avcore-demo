@@ -31,7 +31,7 @@
     "service": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log 2>&1",
     "test": "ts-node ./avcoreDemoServer.ts",
     "log": "tail -f ~/avcoreDemoServer.log -n 1000",
-    "kill": "for i in $( ps ax | awk '/avcoreDemoServer.ts/ {print $1}' ); do kill ${i}; done",
+    "kill": "for i in $( ps ax | awk '/avcoreDemoServer/ {print $1}' ); do kill ${i}; done",
     "copylog": "if [ -f ~/avcoreDemoServer.log ]; then cp ~/avcoreDemoServer.log ~/avcoreDemoServer-$(date +%Y-%m-%d-%H-%M).log; fi",
     "restart": "npm run kill;npm run copylog;npm start"
   }
