@@ -1,6 +1,7 @@
 import {Browser, launch, Page} from 'puppeteer';
 
 export async function loadTestAudio() {
+    const dalays:number[]=[];
     const browser:Browser = await launch({
         headless:true,
         ignoreDefaultArgs: ['--enable-automation'],
@@ -21,6 +22,11 @@ export async function loadTestAudio() {
         for (let i = 0; i < args.length; ++i)
             if(i>0 && msg.args()[i-1] && args[i-1].toString().indexOf('ADDTRACK')>-1){
                 console.log(args[i].toString());
+                const num=args[i].toString().replace('JSHandle:','');
+                dalays.push(parseInt(num));
+                const sum = dalays.reduce((a, b) => a + b, 0);
+                const avg = (sum / dalays.length) || 0;
+                console.log(`avg: ${avg} min: ${Math.min(...dalays)}  max: ${Math.max(...dalays)}`);
             }
             else{
                 console.info(args[i].toString());
