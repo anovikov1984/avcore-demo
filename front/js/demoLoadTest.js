@@ -71,8 +71,8 @@
                     else {
                         connectionBox.classList.remove('connected');
                     }
-                }) .on('addtrack',({kind})=>{
-                    if (kind === kinds[kinds.length-1]) {
+                }) .on('addtrack',(e)=>{
+                    if (e.track.kind === kinds[kinds.length-1]) {
                         console.info('ADDTRACK', Date.now() - d);
                     }
                 });
