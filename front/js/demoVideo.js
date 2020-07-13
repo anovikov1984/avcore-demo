@@ -144,7 +144,7 @@
                         connectionBox.classList.remove('connected');
                     }
                 });
-                await capture.publish(_stream);
+                await capture.publish(mediaStream);
             }
             catch (e) {
                 if(e && ERROR[e.errorId]){
