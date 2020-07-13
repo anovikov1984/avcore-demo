@@ -20,7 +20,10 @@ export async function loadTestAudio() {
 
         for (let i = 0; i < args.length; ++i)
             if(i>0 && msg.args()[i-1] && args[i-1].toString().indexOf('ADDTRACK')>-1){
-                console.log(args[i]);
+                console.log(args[i].toString());
+            }
+            else{
+                console.info(args[i].toString());
             }
     });
     const onError=msg => console.log('browser', 'error', msg);
