@@ -7,7 +7,6 @@ import {join} from "path";
 import {json as jsonBodyParser} from "body-parser";
 import * as router from 'router';
 import {STAT} from 'avcore';
-import {loadTestAudio} from './tests/load-test-audio';
 const PORT=9099;
 const STAT_TYPE={
     [STAT.TRAFFIC]:0,
@@ -70,8 +69,10 @@ connectMongo().then(()=>{
     });
 }).catch(()=>{
 });
+/*import {loadTestAudio} from './tests/load-test-audio';
+
 (async function start() {
-    for (let i=0;i<40;i++){
+    for (let i=0;i<10;i++){
         await loadTestAudio()
     }
-})().then(()=>{}).catch(()=>{});
+})().then(()=>{}).catch(()=>{});*/
