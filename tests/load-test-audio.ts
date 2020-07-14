@@ -33,7 +33,7 @@ export async function loadTestAudio() {
                         console.log(`num: ${dalays.length} avg: ${avg} min: ${Math.min(...dalays)}  max: ${Math.max(...dalays)}`);
                     }
                     else {
-                        //console.info(args[i].toString());
+                        console.info(args[i].toString());
                     }
             });
             const onError = msg => console.log('browser', 'error', msg);
