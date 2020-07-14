@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData">
+  <component name="PublishConfigData" autoUpload="On explicit save action" serverName="root@codeda.com">
     <serverData>
+      <paths name="conference-avcore">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="landr">
         <serverdata>
           <mappings>
@@ -47,7 +54,7 @@
       <paths name="root@codeda.com">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/avcore-demo/tests" local="$PROJECT_DIR$/tests" web="/" />
           </mappings>
         </serverdata>
       </paths>
@@ -59,5 +66,6 @@
         </serverdata>
       </paths>
     </serverData>
+    <option name="myAutoUpload" value="ON_EXPLICIT_SAVE" />
   </component>
 </project>
