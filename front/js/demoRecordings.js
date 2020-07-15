@@ -20,11 +20,8 @@
     const listStreams=$('#list-streams');
     const streamTable=$('#stream-table');
     const recordingTable=$('#recording-table');
-    listStreams.disabled=true;
+    listStreams.disabled=false;
 
-    api.initSocket().then(()=>{
-        listStreams.disabled=false;
-    });
 
     listStreams.addEventListener('click', async (event)=> {
         event.preventDefault();

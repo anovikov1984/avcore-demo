@@ -188,7 +188,6 @@
         mixerButtons.forEach(b=>b.disabled=true);
         if(!api){
             api = new MediasoupSocketApi(url, worker, tokenMixer);
-            await api.initSocket();
         }
         if(mixerId){
             await api.mixerClose({mixerId});

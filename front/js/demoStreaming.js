@@ -25,10 +25,7 @@
     const conferenceIds={};
     const socketApi=new MediasoupSocketApi(url,worker,token);
     const subscribe=$('#subscribe');
-    subscribe.disabled=true;
-    socketApi.initSocket().then(()=>{
-        subscribe.disabled=false;
-    });
+    subscribe.disabled=false;
     subscribe.addEventListener('click', async (event)=> {
         $('#subscribe').disabled=true;
         event.preventDefault();

@@ -194,9 +194,7 @@
 
     if(recToken) {
         const socketApi = new MediasoupSocketApi(url, worker, recToken);
-        socketApi.initSocket().then(() => {
-            recording.disabled = false;
-        });
+        recording.disabled = false;
         recording.addEventListener('click', async (event)=> {
             recording.disabled=true;
             if(isRecording){
