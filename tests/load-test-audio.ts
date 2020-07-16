@@ -2,6 +2,11 @@ import {Browser, launch, Page} from 'puppeteer';
 const dalays:number[]=[];
 let ready=0;
 const num=5;
+let readyAllTimeout;
+function updateReadyAllTimeout() {
+    clearTimeout(readyAllTimeout);
+    readyAllTimeout=setTimeout(console.log,2000,'READY ALL');
+}
 export async function loadTestAudio() {
     return new Promise(async (resolve)=>{
         let _ready=0;
@@ -22,7 +27,7 @@ export async function loadTestAudio() {
             let page: Page = await browser.newPage();
             page.on('console', msg => {
                 const args = msg.args();
-
+                updateReadyAllTimeout();
                 for (let i = 0; i < args.length; ++i)
                     if (i > 0 && msg.args()[i - 1] && args[i - 1].toString().indexOf('ADDTRACK') > -1) {
                         //console.log(args[i].toString());
@@ -60,7 +65,7 @@ export async function loadTestAudio() {
                 };
                 await click();
             });
-            await page.goto('http://127.0.0.1:9099/demoLoadTest.html?url=http://127.0.0.1:7776&worker=random&stream=09beafb1-32e2-437a-87b0-e08d07ba66f8&token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiIwOWJlYWZiMS0zMmUyLTQzN2EtODdiMC1lMDhkMDdiYTY2ZjgiLCJvcGVyYXRpb24iOiIxIiwiaWF0IjoxNTk0NjA5MjAwfQ.YHPtobQhdiH6O9I2QsBshkDO-aLWdkuXT00GtQo_m2uZsYQm0tFrDj44d-nqOx-OHLzUv_KUlzQ03DWGYbtOzw&kinds=audio&num=50');
+            await page.goto('https://avcore-demo.codeda.com/demoLoadTest.html?originUrl=https://meeting-mcu.codeda.com:8080&worker=random&stream=09beafb1-32e2-437a-87b0-e08d07ba66f8&token=eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiIwOWJlYWZiMS0zMmUyLTQzN2EtODdiMC1lMDhkMDdiYTY2ZjgiLCJvcGVyYXRpb24iOiIxIiwiaWF0IjoxNTk0NjA5MjAwfQ.YHPtobQhdiH6O9I2QsBshkDO-aLWdkuXT00GtQo_m2uZsYQm0tFrDj44d-nqOx-OHLzUv_KUlzQ03DWGYbtOzw&kinds=audio&num=50');
         }
     })
   }
