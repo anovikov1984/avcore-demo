@@ -17,7 +17,7 @@
     const kindsParam=getParameterByName('kinds');
     const kinds=(kindsParam && kindsParam.split(',')) || ['video','audio'];
     const workerStr=getParameterByName('worker')||'0';
-    const workerPerServer=4;
+    const workerPerServer=8;
     const numServers=1;
     const num = getParameterByName('num')||1;
     let origin;
