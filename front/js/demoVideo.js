@@ -23,6 +23,13 @@
     const workerPerServer=4;
     const numServers=1;
     const worker = workerStr==='random'?Math.floor(Math.random()*numServers*workerPerServer):parseInt(workerStr)||0;
+    let origin;
+    const originToken = getParameterByName('originToken');
+    const originUrl = getParameterByName('originUrl');
+    const originWorker = getParameterByName('originWorker')||0;
+    if(originUrl){
+        origin={url:originUrl, worker:originWorker, token:originToken||token}
+    }
     console.log(`worker is ${worker}`);
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
