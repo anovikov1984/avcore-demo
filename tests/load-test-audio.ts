@@ -71,7 +71,7 @@ export async function loadTestAudio() {
   }
 
 (async function start() {
-    for (let i=0;i<4;i++){
+    for (let i=0;i<2;i++){
         await loadTestAudio()
     }
 })().then(()=>{}).catch(()=>{});
