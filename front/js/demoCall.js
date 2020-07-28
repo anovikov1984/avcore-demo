@@ -1,5 +1,5 @@
 (async function () {
-    const {MediasoupSocketApi,ERROR,MIXER_PIPE_TYPE}=avcore;
+    const {MediasoupSocketApi,ERROR,MIXER_PIPE_TYPE,HLS}=avcore;
     const {ConferenceApi,Utils}=avcoreClient;
 
     function getParameterByName(name, url) {
@@ -194,6 +194,7 @@
             mixerButton.innerText='Start Mixer';
             mixerId=null;
             mixerLivePipeId=null;
+            mixerHlsPipeId=null;
             if(mixerRecPipeId){
                 lastRecording=mixerRecPipeId;
                 adminRecButton.disabled=false;
@@ -203,6 +204,8 @@
             mixerLiveButton.innerText='Start Mixer Live';
             mixerRtmpButton.innerText='Start Mixer RTMP';
             mixerRecButton.innerText='Start Mixer Recording';
+            mixerHlsButton.innerText='Start Mixer HLS';
+            playHlsButton.disabled=true;
         }
         else {
             const res=await api.mixerStart();
@@ -307,6 +310,37 @@
             elem.webkitRequestFullscreen();
         } else if (elem.msRequestFullscreen) {
             elem.msRequestFullscreen();
+        }
+    });
+
+
+    let mixerHlsPipeId;
+    const mixerHlsButton=$('#mixer-hls');
+    const playHlsButton=$('#hls');
+    mixerHlsButton.addEventListener('click', async function (event) {
+        event.preventDefault();
+        if(mixerId){
+            mixerButton.disabled=true;
+            mixerButtons.forEach(b=>b.disabled=true);
+            if(mixerHlsPipeId){
+                await api.mixerPipeStop({mixerId,pipeId:mixerHlsPipeId});
+                mixerHlsButton.innerText='Start Mixer HLS';
+                playHlsButton.disabled=true;
+                mixerHlsPipeId=null;
+            }
+            else {
+                const res=await api.mixerPipeStart({mixerId,kinds,type:MIXER_PIPE_TYPE.HLS,formats:[{videoBitrate:4000},{videoBitrate:1000,height:360}]});
+                mixerHlsPipeId=res.pipeId;
+                mixerHlsButton.innerText='Stop Mixer HLS';
+                playHlsButton.disabled=false;
+            }
+            mixerButtons.forEach(b=>b.disabled=false);
+            mixerButton.disabled=false;
+        }
+    });
+    playHlsButton.addEventListener('click', async function (event) {
+        if(mixerHlsPipeId){
+            window.open(`demoHls.html?url=${url}/${HLS.ROOT}/${mixerHlsPipeId}/${HLS.PLAYLIST}`, '_blank')
         }
     });
 })();

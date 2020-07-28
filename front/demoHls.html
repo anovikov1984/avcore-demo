@@ -1,0 +1,44 @@
+<html>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<video id="video" controls autoplay muted></video>
+<script>
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+    function runHls(videoId,url) {
+        const video = document.getElementById(videoId);
+        if(Hls.isSupported())
+        {
+            const hls = new Hls();
+            hls.loadSource(url);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED,function()
+            {
+                //video.play();
+            });
+        }
+        else if (video.canPlayType('application/vnd.apple.mpegurl'))
+        {
+            video.src = url;
+            video.addEventListener('canplay',function()
+            {
+                video.play();
+            });
+        }
+    }
+    const url=getParameterByName('url');
+    if(url){
+        runHls("video",url);
+    }
+
+
+</script>
+</body>
+</html>

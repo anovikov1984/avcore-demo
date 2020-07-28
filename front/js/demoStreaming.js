@@ -35,12 +35,12 @@
             const liveUrl = getParameterByName('rtmpUrl')||getParameterByName('liveUrl');
             const filePath = getParameterByName('filePath')||'https://codeda.com/data/syncTest.mp4';
             const {kinds}=await socketApi.kindsByFile({filePath:liveUrl||filePath});
-            //const kinds=['audio','video'];
+            //const kinds=['audio'];
             if(liveUrl){
                 await socketApi.liveStreaming({kinds,stream,url: liveUrl,videoBitrate:'4000'});
             }
             else {
-                await socketApi.fileStreaming({kinds,stream,filePath,videoBitrate:'4000'});
+                await socketApi.fileStreaming({kinds,stream,filePath,additionalInputOptions:['-stream_loop','-1']});
             }
             playback = new ConferenceApi({
                 url,worker,

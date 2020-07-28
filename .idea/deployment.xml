@@ -54,7 +54,7 @@
       <paths name="root@codeda.com">
         <serverdata>
           <mappings>
-            <mapping deploy="/avcore-demo/tests" local="$PROJECT_DIR$/tests" web="/" />
+            <mapping deploy="/avcore-demo" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>
