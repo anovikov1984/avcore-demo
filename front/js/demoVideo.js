@@ -26,9 +26,9 @@
     let origin;
     const originToken = getParameterByName('originToken');
     const originUrl = getParameterByName('originUrl');
-    const originWorker = getParameterByName('originWorker')||0;
-    if(originUrl){
-        origin={url:originUrl, worker:originWorker, token:originToken||token}
+    const originWorker = getParameterByName('originWorker')||null;
+    if(originUrl || originWorker !== null){
+        origin={url:originUrl||url, worker:originWorker||0, token:originToken||token}
     }
     console.log(`worker is ${worker}`);
     const $ = document.querySelector.bind(document);

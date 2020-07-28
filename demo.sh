@@ -45,7 +45,7 @@ echo ""
 
 echo "Subscribe random worker:"
 echo ""
-echo "https://avcore-demo-mcu.codeda.com/demoVideo.html?url=${SRV}&worker=random&stream=${STREAM_VIDEO}&token=${TOKEN_VIDEO}&recToken=${TOKEN_RECORDING}${SIMULCAST}&listen=true"
+echo "https://avcore-demo-mcu.codeda.com/demoVideo.html?url=${SRV}&originWorker=${WORKER}&worker=random&stream=${STREAM_VIDEO}&token=${TOKEN_VIDEO}&recToken=${TOKEN_RECORDING}${SIMULCAST}&listen=true"
 echo ""
 
 echo "Recordings:"
