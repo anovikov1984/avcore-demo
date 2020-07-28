@@ -206,6 +206,7 @@
             mixerRecButton.innerText='Start Mixer Recording';
             mixerHlsButton.innerText='Start Mixer HLS';
             playHlsButton.disabled=true;
+            playLiveButton.disabled=true;
         }
         else {
             const res=await api.mixerStart();
@@ -224,6 +225,7 @@
     });
     let mixerLivePipeId;
     const mixerLiveButton=$('#mixer-live');
+    const playLiveButton=$('#live-player');
     mixerLiveButton.addEventListener('click', async function (event) {
         event.preventDefault();
         if(mixerId){
@@ -233,17 +235,23 @@
                 await api.mixerPipeStop({mixerId,pipeId:mixerLivePipeId});
                 mixerLiveButton.innerText='Start Mixer Live';
                 mixerLivePipeId=null;
+                playLiveButton.disabled=true;
             }
             else {
                 const res=await api.mixerPipeStart({mixerId,type:MIXER_PIPE_TYPE.LIVE,stream:streamMixer});
                 mixerLivePipeId=res.pipeId;
                 mixerLiveButton.innerText='Stop Mixer Live';
+                playLiveButton.disabled=false;
             }
             mixerButtons.forEach(b=>b.disabled=false);
             mixerButton.disabled=false;
         }
     });
-
+    playLiveButton.addEventListener('click', async function (event) {
+        if(mixerLivePipeId){
+            window.open(`demoVideo.html?url=${url}&worker=${worker}&stream=${streamMixer}&token=${tokenMixer}&listen=true`, '_blank')
+        }
+    });
     const adminRecButton=$('#rec-admin');
     let lastRecording;
     adminRecButton.addEventListener('click', async function (event) {
