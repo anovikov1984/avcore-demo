@@ -57,6 +57,7 @@ echo ""
 echo "https://avcore-demo.codeda.com/demoCall.html?url=${SRV}&worker=${WORKER}&streamOut=${STREAM_CALL_1}&tokenOut=${TOKEN_CALL_1}&streamIn=${STREAM_CALL_2}&tokenIn=${TOKEN_CALL_2}&streamMixer=${STREAM_CALL_MIXER}&tokenMixer=${TOKEN_CALL_MIXER}${SIMULCAST}"
 echo ""
 echo "https://avcore-demo.codeda.com/demoCall.html?url=${SRV}&worker=${WORKER}&streamOut=${STREAM_CALL_2}&tokenOut=${TOKEN_CALL_2}&streamIn=${STREAM_CALL_1}&tokenIn=${TOKEN_CALL_1}${SIMULCAST}"
+echo ""
 
 echo "RTMP:"
 echo "url: ${RTMP_APP}"
