@@ -17,6 +17,13 @@
         if(Hls.isSupported())
         {
             const hls = new Hls();
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                switch (data.type) {
+                    case Hls.ErrorTypes.NETWORK_ERROR:
+                        console.log("network error on playlist load, retrying.");
+                        this.hlsTryLoadTimer = setTimeout(() => runHls(videoId,url), 200);
+                }
+            });
             hls.loadSource(url);
             hls.attachMedia(video);
             hls.on(Hls.Events.MANIFEST_PARSED,function()

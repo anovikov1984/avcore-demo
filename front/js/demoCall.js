@@ -46,6 +46,50 @@
         const brIn={video:$(`#playback-video-bit-rate`),audio:$(`#playback-audio-bit-rate`)};
         const brOut={video:$(`#publish-video-bit-rate`),audio:$(`#publish-audio-bit-rate`)};
         const connectionBox=$('#connection-box');
+
+        let isScreen=b.id==='screen-share';
+        let mediaStream=await Utils.getUserMedia({video:kinds.includes('video'),audio:kinds.includes('audio') && b.id!=='screen-share'},b.id==='screen-share');
+        if(isScreen && kinds.includes('audio')){
+            const _stream=await Utils.getUserMedia({video:false,audio:true});
+            mediaStream=new MediaStream([...mediaStream.getTracks(),..._stream.getTracks()]);
+        }
+        try {
+            capture = new ConferenceApi({
+                url,worker,
+                stream:streamOut,
+                token:tokenOut,
+                simulcast
+            }).on('bitRate',({bitRate,kind})=>{
+                brOut[kind].innerText='↑ '+Math.round(bitRate).toString();
+                if(bitRate>0){
+                    brOut[kind].classList.add('connected');
+                }
+                else {
+                    brOut[kind].classList.remove('connected');
+                }
+            }).on('connectionstatechange',({state})=>{
+                console.log('connectionstatechange',state);
+                if(state==='connected'){
+                    connectionBox.classList.add('connected');
+                }
+                else {
+                    connectionBox.classList.remove('connected');
+                }
+            });
+            await capture.publish(mediaStream);
+        }
+        catch (e) {
+            if(e && ERROR[e.errorId]){
+                alert(ERROR[e.errorId])
+            }
+            console.log(e);
+            if(playback){
+                await playback.close();
+            }
+            return;
+
+        }
+
         try {
             playback = new ConferenceApi({
                 url,worker,
@@ -111,48 +155,6 @@
                 await playback.close();
             }
             return;
-        }
-        let isScreen=b.id==='screen-share';
-        let mediaStream=await Utils.getUserMedia({video:kinds.includes('video'),audio:kinds.includes('audio') && b.id!=='screen-share'},b.id==='screen-share');
-        if(isScreen && kinds.includes('audio')){
-            const _stream=await Utils.getUserMedia({video:false,audio:true});
-            mediaStream=new MediaStream([...mediaStream.getTracks(),..._stream.getTracks()]);
-        }
-        try {
-            capture = new ConferenceApi({
-                url,worker,
-                stream:streamOut,
-                token:tokenOut,
-                simulcast
-            }).on('bitRate',({bitRate,kind})=>{
-                brOut[kind].innerText='↑ '+Math.round(bitRate).toString();
-                if(bitRate>0){
-                    brOut[kind].classList.add('connected');
-                }
-                else {
-                    brOut[kind].classList.remove('connected');
-                }
-            }).on('connectionstatechange',({state})=>{
-                console.log('connectionstatechange',state);
-                if(state==='connected'){
-                    connectionBox.classList.add('connected');
-                }
-                else {
-                    connectionBox.classList.remove('connected');
-                }
-            });
-            await capture.publish(mediaStream);
-        }
-        catch (e) {
-            if(e && ERROR[e.errorId]){
-                alert(ERROR[e.errorId])
-            }
-            console.log(e);
-            if(playback){
-                await playback.close();
-            }
-            return;
-
         }
 
         $('#stop-playing').disabled=false;
