@@ -27,6 +27,7 @@ SRV=$1
 
 STREAM_VIDEO=`uuidgen`
 STREAM_RTMP=`uuidgen`
+STREAM_RTMP_HLS=`uuidgen`
 STREAM_CALL_1=`uuidgen`
 STREAM_CALL_2=`uuidgen`
 STREAM_CALL_MIXER=`uuidgen`
@@ -34,6 +35,7 @@ STREAM_CALL_MIXER=`uuidgen`
 TOKEN_VIDEO=`curl -X GET "${SRV}/auth/${STREAM_VIDEO}/1" -H "accept: text/plain" 2>/dev/null`
 TOKEN_RECORDING=`curl -X GET "${SRV}/auth/2" -H "accept: text/plain" 2>/dev/null`
 TOKEN_RTMP=`curl -X GET "${SRV}/auth/${STREAM_RTMP}/3" -H "accept: text/plain" 2>/dev/null`
+TOKEN_RTMP_HLS=`curl -X GET "${SRV}/auth/${STREAM_RTMP_HLS}/3" -H "accept: text/plain" 2>/dev/null`
 TOKEN_CALL_1=`curl -X GET "${SRV}/auth/${STREAM_CALL_1}/1" -H "accept: text/plain" 2>/dev/null`
 TOKEN_CALL_2=`curl -X GET "${SRV}/auth/${STREAM_CALL_2}/1" -H "accept: text/plain" 2>/dev/null`
 TOKEN_CALL_MIXER=`curl -X GET "${SRV}/auth/${STREAM_CALL_MIXER}/4" -H "accept: text/plain" 2>/dev/null`
@@ -67,7 +69,8 @@ echo "https://avcore-demo.codeda.com/demoStreaming.html?url=${SRV}&worker=${WORK
 echo ""
 echo "https://avcore-demo.codeda.com/demoVideo.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP}&token=${TOKEN_RTMP}&listen=true"
 echo ""
-echo "https://avcore-demo.codeda.com/demoLiveToHls.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP}&token=${TOKEN_RTMP}&rtmpUrl=${RTMP_APP}${STREAM_RTMP}&codecCopy=true"
+echo "https://avcore-demo.codeda.com/demoLiveToHls.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP_HLS}&token=${TOKEN_RTMP_HLS}&rtmpUrl=${RTMP_APP}${STREAM_RTMP}&codecCopy=true"
 echo ""
-echo "https://avcore-demo.codeda.com/demoHls.html?url=${SRV}/hls/${STREAM_RTMP}/master.m3u8"
+echo "https://avcore-demo.codeda.com/demoHls.html?url=${SRV}/hls/${STREAM_RTMP_HLS}/master.m3u8"
 echo ""
+echo "https://avcore-demo.codeda.com/demoHlsStreaming.html?url=${SRV}&worker=${WORKER}&stream=${STREAM_RTMP}&token=${TOKEN_RTMP}&rtmpUrl=${RTMP_APP}${STREAM_RTMP}&streamHls=${STREAM_RTMP_HLS}&tokenHls=${TOKEN_RTMP_HLS}&codecCopy=true"
