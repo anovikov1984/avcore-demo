@@ -1,5 +1,5 @@
 (async function () {
-    const {MediasoupSocketApi,ERROR,MIXER_PIPE_TYPE,HLS}=avcore;
+    const {MediasoupSocketApi,ERROR,MIXER_PIPE_TYPE,HLS,MIXER_RENDER_TYPE}=avcore;
     const {ConferenceApi,Utils}=avcoreClient;
 
     function getParameterByName(name, url) {
@@ -207,8 +207,9 @@
             mixerRtmpButton.innerText='Start Mixer RTMP';
             mixerRecButton.innerText='Start Mixer Recording';
             mixerHlsButton.innerText='Start Mixer HLS';
-            playHlsButton.disabled=true;
+            copyHlsButton.disabled=true;
             playLiveButton.disabled=true;
+            hlsUrlInput.value = '';
         }
         else {
             const res=await api.mixerStart();
@@ -216,8 +217,8 @@
             await Promise.all([
                 api.mixerAdd({mixerId,stream:streamIn,kind:'audio'}),
                 api.mixerAdd({mixerId,stream:streamOut,kind:'audio'}),
-                api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:640,height:480,z:0}}),
-                api.mixerAdd({mixerId,stream:streamOut,kind:'video',options:{x:640,y:0,width:640,height:480,z:0}})
+                api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:640,height:720,z:0,renderType:MIXER_RENDER_TYPE.CROP}}),
+                api.mixerAdd({mixerId,stream:streamOut,kind:'video',options:{x:640,y:0,width:640,height:720,z:0,renderType:MIXER_RENDER_TYPE.CROP}})
             ]);
             mixerButton.innerText='Stop Mixer';
             mixerButtons.forEach(b=>b.disabled=false);
@@ -240,7 +241,7 @@
                 playLiveButton.disabled=true;
             }
             else {
-                const res=await api.mixerPipeStart({mixerId,type:MIXER_PIPE_TYPE.LIVE,stream:streamMixer});
+                const res=await api.mixerPipeStart({mixerId,type:MIXER_PIPE_TYPE.LIVE,stream:streamMixer/*,simulcast:[{height:360},{}]*/});
                 mixerLivePipeId=res.pipeId;
                 mixerLiveButton.innerText='Stop Mixer Live';
                 playLiveButton.disabled=false;
@@ -326,7 +327,7 @@
 
     let mixerHlsPipeId;
     const mixerHlsButton=$('#mixer-hls');
-    const playHlsButton=$('#hls');
+    const copyHlsButton=$('#copy-hls');
     mixerHlsButton.addEventListener('click', async function (event) {
         event.preventDefault();
         if(mixerId){
@@ -335,22 +336,25 @@
             if(mixerHlsPipeId){
                 await api.mixerPipeStop({mixerId,pipeId:mixerHlsPipeId});
                 mixerHlsButton.innerText='Start Mixer HLS';
-                playHlsButton.disabled=true;
+                copyHlsButton.disabled=true;
                 mixerHlsPipeId=null;
+                hlsUrlInput.value = '';
+
             }
             else {
                 const res=await api.mixerPipeStart({mixerId,kinds,type:MIXER_PIPE_TYPE.HLS,formats:[{videoBitrate:4000},{videoBitrate:1000,height:360}]});
                 mixerHlsPipeId=res.pipeId;
                 mixerHlsButton.innerText='Stop Mixer HLS';
-                playHlsButton.disabled=false;
+                copyHlsButton.disabled=false;
+                hlsUrlInput.value = `${url}/hls/${mixerHlsPipeId}/master.m3u8`;
             }
             mixerButtons.forEach(b=>b.disabled=false);
             mixerButton.disabled=false;
         }
     });
-    playHlsButton.addEventListener('click', async function (event) {
-        if(mixerHlsPipeId){
-            window.open(`demoHls.html?url=${url}/${HLS.ROOT}/${mixerHlsPipeId}/${HLS.PLAYLIST}`, '_blank')
-        }
+    const hlsUrlInput=$('#hls-url-input');
+    copyHlsButton.addEventListener('click', async function (event) {
+        hlsUrlInput.select();
+        document.execCommand('copy');
     });
 })();

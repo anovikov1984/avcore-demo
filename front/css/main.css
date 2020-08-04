@@ -124,6 +124,7 @@ button:hover {
 input.input {
   height: 62px;
   padding: 0 35px 0 35px;
+  margin-top: 7px;
 }
 
 .focus-input {
