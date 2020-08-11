@@ -24,6 +24,7 @@
     const kinds=(kindsParam && kindsParam.split(',')) || ['video','audio'];
     const streamMixer = getParameterByName('streamMixer');
     const tokenMixer = getParameterByName('tokenMixer');
+    const filePath = getParameterByName('filePath');
     const mixerButton=$('#mixer');
     const mixerButtons=$$('.mixer-button');
     const mixerButtonContainers=$$('.mixer-button-container');
@@ -214,12 +215,24 @@
         else {
             const res=await api.mixerStart();
             mixerId=res.mixerId;
-            await Promise.all([
+            const promises=[
                 api.mixerAdd({mixerId,stream:streamIn,kind:'audio'}),
-                api.mixerAdd({mixerId,stream:streamOut,kind:'audio'}),
-                api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:640,height:720,z:0,renderType:MIXER_RENDER_TYPE.CROP}}),
-                api.mixerAdd({mixerId,stream:streamOut,kind:'video',options:{x:640,y:0,width:640,height:720,z:0,renderType:MIXER_RENDER_TYPE.CROP}})
-            ]);
+                api.mixerAdd({mixerId,stream:streamOut,kind:'audio'})
+            ];
+            if(!filePath){
+                promises.push(
+                    api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:640,height:720,z:0,renderType:MIXER_RENDER_TYPE.CROP}}),
+                    api.mixerAdd({mixerId,stream:streamOut,kind:'video',options:{x:640,y:0,width:640,height:720,z:0,renderType:MIXER_RENDER_TYPE.CROP}})
+                );
+            }
+            else {
+                promises.push(
+                    api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:640,height:360,z:0,renderType:MIXER_RENDER_TYPE.CROP}}),
+                    api.mixerAdd({mixerId,stream:streamOut,kind:'video',options:{x:640,y:0,width:640,height:360,z:0,renderType:MIXER_RENDER_TYPE.CROP}}),
+                    api.mixerAddFile({mixerId,kinds:['audio','video'],options:{x:0,y:360,width:1280,height:360,z:0,renderType:MIXER_RENDER_TYPE.PAD},filePath,removeOnExit:false,loop:true})
+                );
+            }
+            await Promise.all(promises);
             mixerButton.innerText='Stop Mixer';
             mixerButtons.forEach(b=>b.disabled=false);
         }
