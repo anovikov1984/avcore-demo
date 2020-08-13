@@ -1,7 +1,7 @@
 #!/bin/bash
 if [[ $# -lt 1 ]]
 then
-    echo "Usage: ./demo.sh url [rtmpApp] [worker] [simulcast]" >&2
+    echo "Usage: ./demo.sh url [rtmpApp] [clientId] [worker] [simulcast]" >&2
     exit 1
 fi
 if [[ -z "$2" ]]
@@ -12,11 +12,17 @@ if [[ -z "$2" ]]
       fi
 if [[ -z "$3" ]]
       then
-        WORKER=0
+        CLIENT_ID='codeda';
       else
-        WORKER=$3
+        CLIENT_ID=$3
     fi
 if [[ -z "$4" ]]
+      then
+        WORKER=0
+      else
+        WORKER=$4
+    fi
+if [[ -z "$5" ]]
       then
         SIMULCAST=""
       else
@@ -32,13 +38,13 @@ STREAM_CALL_1=`uuidgen`
 STREAM_CALL_2=`uuidgen`
 STREAM_CALL_MIXER=`uuidgen`
 
-TOKEN_VIDEO=`curl -X GET "${SRV}/auth/${STREAM_VIDEO}/1" -H "accept: text/plain" 2>/dev/null`
-TOKEN_RECORDING=`curl -X GET "${SRV}/auth/2" -H "accept: text/plain" 2>/dev/null`
-TOKEN_RTMP=`curl -X GET "${SRV}/auth/${STREAM_RTMP}/3" -H "accept: text/plain" 2>/dev/null`
-TOKEN_RTMP_HLS=`curl -X GET "${SRV}/auth/${STREAM_RTMP_HLS}/3" -H "accept: text/plain" 2>/dev/null`
-TOKEN_CALL_1=`curl -X GET "${SRV}/auth/${STREAM_CALL_1}/1" -H "accept: text/plain" 2>/dev/null`
-TOKEN_CALL_2=`curl -X GET "${SRV}/auth/${STREAM_CALL_2}/1" -H "accept: text/plain" 2>/dev/null`
-TOKEN_CALL_MIXER=`curl -X GET "${SRV}/auth/${STREAM_CALL_MIXER}/4" -H "accept: text/plain" 2>/dev/null`
+TOKEN_VIDEO=`curl -X GET "https://avcore-demo.codeda.com/auth/${CLIENT_ID}/${STREAM_VIDEO}/1" -H "x-server-url: ${SRV}" -H "accept: text/plain" 2>/dev/null`
+TOKEN_RECORDING=`curl -X GET "https://avcore-demo.codeda.com/auth/${CLIENT_ID}/-/2" -H "x-server-url: ${SRV}" -H "accept: text/plain" 2>/dev/null`
+TOKEN_RTMP=`curl -X GET "https://avcore-demo.codeda.com/auth/${CLIENT_ID}/${STREAM_RTMP}/3" -H "x-server-url: ${SRV}" -H "accept: text/plain" 2>/dev/null`
+TOKEN_RTMP_HLS=`curl -X GET "https://avcore-demo.codeda.com/auth/${CLIENT_ID}/${STREAM_RTMP_HLS}/3" -H "x-server-url: ${SRV}" -H "accept: text/plain" 2>/dev/null`
+TOKEN_CALL_1=`curl -X GET "https://avcore-demo.codeda.com/auth/${CLIENT_ID}/${STREAM_CALL_1}/1" -H "x-server-url: ${SRV}" -H "accept: text/plain" 2>/dev/null`
+TOKEN_CALL_2=`curl -X GET "https://avcore-demo.codeda.com/auth/${CLIENT_ID}/${STREAM_CALL_2}/1" -H "x-server-url: ${SRV}" -H "accept: text/plain" 2>/dev/null`
+TOKEN_CALL_MIXER=`curl -X GET "https://avcore-demo.codeda.com/auth/${CLIENT_ID}/${STREAM_CALL_MIXER}/4" -H "x-server-url: ${SRV}" -H "accept: text/plain" 2>/dev/null`
 
 echo "Publish:"
 echo ""
