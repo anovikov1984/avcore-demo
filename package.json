@@ -21,10 +21,13 @@
     "console-stamp": "^0.2.9",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "jimp": "^0.16.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.20",
     "puppeteer": "^5.1.0",
-    "router": "^1.3.4"
+    "qrcode-reader": "^1.0.4",
+    "router": "^1.3.4",
+    "serve-index": "^1.9.1"
   },
   "scripts": {
     "update-avcore": "npm update avcore -f",
@@ -32,7 +35,7 @@
     "service": "ts-node ./avcoreDemoServer.ts  >~/avcoreDemoServer.log 2>&1",
     "test": "ts-node ./avcoreDemoServer.ts",
     "log": "tail -f ~/avcoreDemoServer.log -n 1000",
-    "kill": "for i in $( ps ax | awk '/avcoreDemoServer/ {print $1}' ); do kill ${i}; done",
+    "kill": "for i in $( ps ax | awk '/avcoreDemoServer\\.ts/ {print $1}' ); do kill ${i}; done",
     "copylog": "if [ -f ~/avcoreDemoServer.log ]; then cp ~/avcoreDemoServer.log ~/avcoreDemoServer-$(date +%Y-%m-%d-%H-%M).log; fi",
     "restart": "npm run kill;npm run copylog;npm start"
   }

@@ -16,25 +16,23 @@ export interface IStat extends Document{
     type:number
     ip:string
     clientId?:string
+    remoteIp?:string
 }
 export const Stat=model<IStat>('Stat', new Schema({
     date: {type: Number, required:true, default:Date.now},
     value: {type: Number, required:true},
     type: {type: Number, required:true},
     clientId: {type: String, required:false},
+    remoteIp: {type: String, required:false},
     ip: {type: String, required:true}
 }));
 
 
 export function connectMongo() {
-    return new Promise((resolve,reject)=>{
-        connect(dbConf.uri, {
-            useCreateIndex: true,
-            useNewUrlParser: true,
-            useFindAndModify: false,
-            useUnifiedTopology: true
-        }).then(async ()=>{
-            resolve();
-        }).catch(reject);
+    return connect(dbConf.uri, {
+        useCreateIndex: true,
+        useNewUrlParser: true,
+        useFindAndModify: false,
+        useUnifiedTopology: true
     })
 }

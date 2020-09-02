@@ -2,16 +2,20 @@ import {createServer} from 'http';
 import * as express from 'express';
 import * as cors from 'cors';
 import * as console_stamp from 'console-stamp';
-import {join} from "path";
+import {join as pathJoin} from "path";
 import {json as jsonBodyParser} from "body-parser";
 import * as router from 'router';
 import {STAT} from 'avcore';
 import {sign as signToken,Algorithm} from 'jsonwebtoken';
 import {connectMongo, Stat} from './db';
+import * as serveIndex from 'serve-index';
+
 const PORT=9099;
 const STAT_TYPE={
     [STAT.TRAFFIC]:0,
     [STAT.CPU]:1,
+    [STAT.STREAM]:2,
+    [STAT.NETWORK]:3
 };
 const auth={
     default:{
@@ -22,9 +26,9 @@ const auth={
 console_stamp(console, '[HH:MM:ss.l]');
 const app = express();
 app.use(cors());
-app.use(express.static(join(__dirname,'front')));
-app.use('/client/dist',express.static(join(__dirname,'node_modules/avcore/client/dist')));
-app.use('/dist',express.static(join(__dirname,'node_modules/avcore/dist')));
+app.use(express.static(pathJoin(__dirname,'front')));
+app.use('/client/dist',express.static(pathJoin(__dirname,'node_modules/avcore/client/dist')));
+app.use('/dist',express.static(pathJoin(__dirname,'node_modules/avcore/dist')));
 app.use(jsonBodyParser());
 app.use(router());
 const server = createServer(app);
@@ -51,6 +55,7 @@ connectMongo().then(()=>{
         res.send(signToken({
             ...req.params/* ,exp: Math.floor(Date.now() / 1000 + 12 * 24 * 3600)*/}, _auth.secret, {algorithm: _auth.algorithm as Algorithm}))
     });
+    app.use(`/screenshots`,express.static(pathJoin(__dirname,'tests/screenshots')),serveIndex(pathJoin(__dirname,'tests/screenshots'), {'icons': true}));
 
 }).catch(()=>{
 });

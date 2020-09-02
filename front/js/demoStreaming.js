@@ -198,4 +198,10 @@
         console.log('muted after',v.muted, v.volume);
         $('#unmute-playback-video').disabled=true;
     });
+    $('#request-keyframe').addEventListener('click',async function (event) {
+        event.preventDefault();
+        if (conferenceIds['video']) {
+            await socketApi.requestKeyframe({consumerId:conferenceIds['video']})
+        }
+    });
 })();

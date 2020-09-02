@@ -25,6 +25,7 @@
     const streamMixer = getParameterByName('streamMixer');
     const tokenMixer = getParameterByName('tokenMixer');
     const filePath = getParameterByName('filePath');
+    const test = !!getParameterByName('test');
     const mixerButton=$('#mixer');
     const mixerButtons=$$('.mixer-button');
     const mixerButtonContainers=$$('.mixer-button-container');
@@ -32,11 +33,6 @@
     if(streamMixer && tokenMixer){
         mixerButtonContainers.forEach(c=>c.style.display='');
         mixerButton.disabled=false;
-        window.onbeforeunload = async function(e) {
-            if(mixerId) {
-                await api.mixerClose({mixerId});
-            }
-        };
     }
 
     let playback,capture;
@@ -193,6 +189,7 @@
             api = new MediasoupSocketApi(url, worker, tokenMixer);
         }
         if(mixerId){
+            window.onbeforeunload=null;
             await api.mixerClose({mixerId});
             mixerButton.innerText='Start Mixer';
             mixerId=null;
@@ -213,6 +210,11 @@
             hlsUrlInput.value = '';
         }
         else {
+            window.onbeforeunload = async function(e) {
+                if(mixerId) {
+                    await api.mixerClose({mixerId});
+                }
+            };
             const res=await api.mixerStart();
             mixerId=res.mixerId;
             const promises=[
@@ -337,7 +339,10 @@
         }
     });
 
-
+    const mixerTestButton=$('#test-button');
+    if(test){
+        mixerTestButton.style.display='';
+    }
     let mixerHlsPipeId;
     const mixerHlsButton=$('#mixer-hls');
     const copyHlsButton=$('#copy-hls');
@@ -369,5 +374,8 @@
     copyHlsButton.addEventListener('click', async function (event) {
         hlsUrlInput.select();
         document.execCommand('copy');
+    });
+    mixerTestButton.addEventListener('click', async function (event) {
+       await api.mixerCommand({mixerId,command:'TEST\n'})
     });
 })();
