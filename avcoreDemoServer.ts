@@ -14,8 +14,7 @@ const PORT=9099;
 const STAT_TYPE={
     [STAT.TRAFFIC]:0,
     [STAT.CPU]:1,
-    [STAT.STREAM]:2,
-    [STAT.NETWORK]:3
+    [STAT.STREAM]:2
 };
 const auth={
     default:{
@@ -39,7 +38,9 @@ server.listen(PORT, () => {
 connectMongo().then(()=>{
     app.post(`/${STAT.STATS}/:type`,(req,res)=>{
         res.send({success:true});
-        Stat.create({...req.body,type:STAT_TYPE[req.params.type]}).then(()=>{}).catch(()=>{});
+        if(req.params.type in STAT_TYPE){
+            Stat.create({...req.body,type:STAT_TYPE[req.params.type]}).then(()=>{}).catch(()=>{});
+        }
     });
     app.get(`/auth/:clientId/:stream/:operation`, async (req, res) => {
         for(const f in req.params){
