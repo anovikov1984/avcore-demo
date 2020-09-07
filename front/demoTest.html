@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+  ~
+  -->
+
+<html lang="en">
+<head>
+    <title>AVCore Demo Call</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<body>
+
+<div class="container-contact">
+    <div class="wrap-contact">
+        <div class="contact-form-title">
+            AVCore Demo Call<div id="connection-box" class="connection-box"></div>
+        </div>
+        <div>
+            Audio:
+            <span id="publish-audio-bit-rate" class="br-box"></span>
+            <span id="playback-audio-bit-rate" class="br-box"></span>
+            Video:
+            <span id="publish-video-bit-rate" class="br-box"></span>
+            <span id="playback-video-bit-rate" class="br-box"></span>
+        </div>
+        <div class="container-contact-form-btn">
+            <button class="contact-form-btn start-button" id="subscribe">Start</button>
+            <button class="contact-form-btn start-button" id="screen-share">Start screenshare</button>
+            <button class="contact-form-btn" disabled id="stop-playing">Stop</button>
+            <button class="contact-form-btn" disabled id="unmute-playback-video">Unmute</button>
+        </div>
+    </div>
+    <video id="playback-video" width="1440" playsinline></video>
+</div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js'></script>
+<script type="text/javascript" src="client/dist/index.js"></script>
+<script type="text/javascript" src="dist/index.js"></script>
+<script src="js/demoTest.js"></script>
+</body>
+</html>
