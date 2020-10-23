@@ -1,4 +1,13 @@
 (async function () {
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
     const {ConferenceApi,Utils}=avcoreClient;
     const {MediasoupSocketApi,ERROR}=avcore;
     const $ = document.querySelector.bind(document);
@@ -12,7 +21,7 @@
     const token= "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdHJlYW0iOiJzdHJlYW0xIiwib3BlcmF0aW9uIjoiMSIsImlhdCI6MTU4OTUzNDEzOX0.MsLz3ctklftdSHiNYReabdNVWr_7vW3-rPZ1jTssxguEo6SS4jLFbVu16v9NeLKzNEf1e6PVDmYN8je9GcBZXw";
     const stream= "stream1";
     const recording=$('#recording');
-    const url='https://rpc.codeda.com';
+    const url = getParameterByName('url')||'https://rpc.codeda.com';
     const worker=1;
     $$('.publish-checkbox').forEach(b=>b.addEventListener('change',async (event)=> {
         console.log('change',b.id);

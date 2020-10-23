@@ -13,7 +13,7 @@
     const {ERROR}=avcore;
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
-    const url='https://rpc.codeda.com';
+    const url = getParameterByName('url')||'https://rpc.codeda.com';
     const worker=1;
     let playback;
     const audioPublish=$('#audioPublish');

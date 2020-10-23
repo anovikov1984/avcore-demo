@@ -6,9 +6,10 @@ console.log('starting');
 connectMongo().then(async ()=>{
     if(!started){
         started=true;
-        //await allIpCpu();
-        //await allIp();
-        await oneIpSum('116.202.235.118');
+        await allIpCpu();
+        await allIp();
+        //await oneIpSum('116.202.235.118');
+        //await oneIpCpu('15.185.120.214');
         //await maxCpu();
         console.log('done');
 
@@ -137,6 +138,19 @@ export async function oneIp(ip:string) {
         }
     ]);
     console.log(data.map(({_id,traffic})=>`${formatData(_id)}   ${traffic}`).join(`
+`));
+}
+export async function oneIpCpu(ip:string) {
+    const formatData=(d:Date)=>`${[`0${d.getDate()}`.slice(-2),`0${d.getMonth()+1}`.slice(-2),d.getFullYear()].join('-')} ${[`0${d.getHours()}`.slice(-2),`0${d.getMinutes()}`.slice(-2),`0${d.getSeconds()}`.slice(-2)].join(':')}`;
+    const data=await Stat.aggregate([
+        {
+            '$match': {
+                'type': 1,
+                ip
+            }
+        }
+    ]);
+    console.log(data.map(({date,value})=>`${formatData(new Date(date))}   ${value}`).join(`
 `));
 }
 export async function oneIpSum(ip:string) {

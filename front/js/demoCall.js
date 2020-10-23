@@ -231,8 +231,14 @@
                 promises.push(
                     api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:640,height:360,z:0,renderType:MIXER_RENDER_TYPE.CROP}}),
                     api.mixerAdd({mixerId,stream:streamOut,kind:'video',options:{x:640,y:0,width:640,height:360,z:0,renderType:MIXER_RENDER_TYPE.CROP}}),
-                    api.mixerAddFile({mixerId,kinds:['audio','video'],options:{x:0,y:360,width:1280,height:360,z:0,renderType:MIXER_RENDER_TYPE.PAD},filePath,removeOnExit:false,loop:true})
+                    api.mixerAddFile({stream:`${streamMixer}-file`,mixerId,kinds:['audio','video'],options:{x:0,y:360,width:1280,height:360,z:0,renderType:MIXER_RENDER_TYPE.PAD},filePath,removeOnExit:false,loop:true})
                 );
+                /*promises.push(
+                    api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:640,height:720,z:1,renderType:MIXER_RENDER_TYPE.PAD}}),
+                    api.mixerAdd({mixerId,stream:streamOut,kind:'video',options:{x:640,y:(640-480)/2,width:640,height:480,z:1,renderType:MIXER_RENDER_TYPE.PAD}}),
+                    api.mixerAddFile({mixerId,kinds:['audio','video'],options:{x:0,y:0,width:1280,height:720,z:0,renderType:MIXER_RENDER_TYPE.PAD},filePath,removeOnExit:false,loop:true})
+                );
+                */
             }
             await Promise.all(promises);
             mixerButton.innerText='Stop Mixer';

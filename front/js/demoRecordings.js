@@ -34,10 +34,14 @@
         }
         listStreams.disabled=false;
     });
-    function addStreamRow(table,stream) {
+    function formatDate(d){
+        return `${[`0${d.getDate()}`.slice(-2),`0${d.getMonth()+1}`.slice(-2),d.getFullYear()].join('-')} ${[`0${d.getHours()}`.slice(-2),`0${d.getMinutes()}`.slice(-2),`0${d.getSeconds()}`.slice(-2)].join(':')}`;
+    }
+
+    function addStreamRow(table,{stream,lastModified}) {
         const tr=document.createElement('tr');
         const td1=document.createElement('td');
-        td1.innerText=stream;
+        td1.innerHTML=`${stream}<br/>${formatDate(new Date(lastModified))}`;
         td1.style.width="100%";
         td1.style.fontSize="20px";
         if(stream===_stream){
@@ -93,8 +97,8 @@
         const td1=document.createElement('td');
         const a=document.createElement('a');
         a.target='_blank';
-        a.href=`${url}/recordings/${recording}`;
-        a.innerText=recording;
+        a.href=recording.url;
+        a.innerText=recording.key;
         td1.appendChild(a);
         td1.style.width="100%";
         td1.style.fontSize="30px";
@@ -105,7 +109,7 @@
         deleteButton.addEventListener('click',async ()=>{
             deleteButton.disabled=true;
             event.preventDefault();
-            await api.deleteRecording({filePath:recording});
+            await api.deleteRecording({filePath:recording.key});
             table.removeChild(tr);
         });
         deleteButton.innerText='Delete';

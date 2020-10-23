@@ -54,7 +54,6 @@
                     kinds,
                     token,
                     stream,
-                    simulcast,
                     origin
                 }).on('bitRate',({bitRate,kind})=>{
                     if(kind==='video'){
@@ -132,7 +131,8 @@
                     kinds,
                     url,worker,
                     stream,
-                    token
+                    token,
+                    simulcast
                 }).on('bitRate',({bitRate,kind})=>{
                     if(kind==='video'){
                         br.innerText=Math.round(bitRate).toString();

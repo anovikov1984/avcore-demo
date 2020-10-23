@@ -16,7 +16,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "avcore": "git+ssh://git@github.com/anovikov1984/avcore.git",
+    "avcore": "^1.0.3",
     "body-parser": "^1.18.3",
     "console-stamp": "^0.2.9",
     "cors": "^2.8.5",
