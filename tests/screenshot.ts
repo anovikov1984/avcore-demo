@@ -1,12 +1,13 @@
 import {Browser, launch, Page} from 'puppeteer';
 import {spawn} from 'child_process';
 import {MediasoupSocketApi, MIXER_RENDER_TYPE} from 'avcore';
+import {PNG} from 'pngjs';
 
 export async function test() {
     return new Promise(async (resolve)=>{
         const width=1280;
-        const height=128;
-        const mixerId='66dcc39a-66ab-4f0a-ad42-0ecf2055acb2';
+        const height=720;
+        const mixerId='55ffe3ae-a320-4990-a9d9-c7d05c4ab1b4';
         const stream='screenshot';
         const listenIp='127.0.0.1';
         const token='eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJjbGllbnRJZCI6ImNvZGVkYSIsInN0cmVhbSI6ImE4ZTBhZmY4LTdjNGItNGVkNC1iYTJlLTlhNjA0NmZlMWQ2ZiIsIm9wZXJhdGlvbiI6IjQiLCJpYXQiOjE2MTI4Nzk4MzJ9.0uCF5cfzUN5bq9OOdd9kKYFqFoZXeaBiPzyozuuzAjYAF10pno6S--7VYcppqPF7bQ2LA6gsWMdGKyjCQ62fFQ';
@@ -36,19 +37,30 @@ export async function test() {
         let cur = Date.now();
         const api=new MediasoupSocketApi('https://rpc.codeda.com',0,token);
         const {port}=await api.allocatePort();
-        const ffmpeg=spawn('ffmpeg',['-f','image2pipe','-i','-', '-f', 'rawvideo', '-s', [width,height].join('x'), '-pix_fmt','yuva420p', `tcp://${listenIp}:${port}?listen=1`])
+        const options=['-s', [page.viewport().width,page.viewport().height].join('x'),'-f','rawvideo','-pix_fmt','rgba','-i','-', '-f', 'rawvideo', '-r','30', '-s', [width,height].join('x'), '-pix_fmt','yuva420p',`tcp://${listenIp}:${port}?listen=1`];
+        const ffmpeg=spawn('ffmpeg',options,{detached:false})
+        console.log(`ffmpeg ${options.join(' ')}`);
+        let running=true;
         ffmpeg.stderr.on('data',data=>console.log(data.toString()));
         ffmpeg.on('exit', async code=>{
+            running=false;
             console.log(`exit ${code}`);
             await api.mixerRemove({mixerId,stream,kind:'video'});
             await api.releasePort({port});
         })
-        await api.mixerAddTcp({mixerId,stream,kind:'video',port,options:{width,height,x:640,y:0,z:1,renderType:MIXER_RENDER_TYPE.PAD},hasTransparency:true});
+        await api.mixerAddTcp({mixerId,stream,kind:'video',port,options:{width,height,x:0,y:0,z:1,renderType:MIXER_RENDER_TYPE.PAD},hasTransparency:true});
         do {
-            const buffer= await page.screenshot({
-                omitBackground: true
-            });
-            ffmpeg.stdin.write(buffer);
+            if(running){
+                const buffer= await page.screenshot({
+                    omitBackground: true
+                });
+                new PNG({ filterType: 4 }).on("parsed", function () {
+                    if(running){
+                        ffmpeg.stdin.write(this.data);
+                    }
+                }).write(buffer);
+            }
+
             cur = Date.now();
         }while (cur<(d+t));
         ffmpeg.stdin.end();
