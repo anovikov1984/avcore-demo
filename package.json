@@ -16,7 +16,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "avcore": "^1.0.47",
+    "avcore": "^1.0.54",
     "body-parser": "^1.18.3",
     "console-stamp": "^0.2.9",
     "cors": "^2.8.5",
