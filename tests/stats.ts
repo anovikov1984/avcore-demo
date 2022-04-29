@@ -23,6 +23,9 @@ export async function allIpCpu() {
         {
             '$match': {
                 'type': 1,
+                'date':{
+                    $gte:(Date.now()-7*2*24*60*60*1000)
+                }
                 //'ip':/116\.202\.235\.[0-9]+/
             }
         }, {
@@ -58,6 +61,9 @@ export async function allIp() {
         {
             '$match': {
                 'type': 0,
+                'date':{
+                    $gte:(Date.now()-7*2*24*60*60*1000)
+                }
                 //'ip':/116\.202\.235\.[0-9]+/
             }
         }, {

@@ -33,7 +33,6 @@
         const codecCopy = !!getParameterByName('codecCopy');
         const copyHlsButton=$('#copy-hls');
         const hlsUrlInput=$('#hls-url-input');
-        hlsUrlInput.value = `${url}/hls/${streamHls}/master.m3u8`;
         copyHlsButton.addEventListener('click', async function (event) {
             hlsUrlInput.select();
             document.execCommand('copy');
@@ -58,7 +57,8 @@
                 //rtmp://draco.streamingwizard.com:1935/wizard/_definst_/demo/streaming_320_v2.mp4
                 const {kinds} = await socketApi.kindsByFile({filePath: liveUrl});
                 //const kinds=['audio'];
-                await socketApiHls.liveToHls({kinds, stream:streamHls, url: liveUrl,formats:codecCopy?undefined:[{videoBitrate:4000},{videoBitrate:2000, height:720}]});
+                const {pipeId}=await socketApiHls.liveToHls({kinds, stream:streamHls, url: liveUrl,formats:codecCopy?undefined:[{videoBitrate:4000},{videoBitrate:2000, height:720}]});
+                hlsUrlInput.value = `${url}/hls/${pipeId}/master.m3u8`;
                 copyHlsButton.disabled=false;
             }
             hlsButton.disabled=false;
@@ -204,4 +204,4 @@
             await socketApi.requestKeyframe({consumerId:conferenceIds['video']})
         }
     });
-})();
+})().catch(e=>console.log('catch',JSON.stringify(e)));

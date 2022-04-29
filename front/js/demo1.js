@@ -85,6 +85,9 @@
         const {num} = await capture['api'].numWorkers();
         $('#get-num-workers-data').value=num;
     });
+    $('#get-heap-snapshot').addEventListener('click', async (event)=> {
+       await capture['api'].heapSnapshot()
+    });
     $$('.capture-button').forEach(b=>b.addEventListener('click',async (event)=> {
         event.preventDefault();
         if(!audioPublish.checked && !videoPublish.checked){
@@ -131,12 +134,7 @@
             if (playPromise !== undefined) {
                 playPromise.then(_ => {
                 }).catch(error => {
-                    v.muted=true;
-                    v.play().then(()=>{
-                        console.log('errorAutoPlayCallback OK');
-                    },(error)=>{
-                        console.log('errorAutoPlayCallback error again');
-                    });
+                    console.log('errorAutoPlayCallback error');
                 });
             }
 
@@ -144,6 +142,7 @@
             $('#get-stats').disabled=false;
             $('#get-load').disabled=false;
             $('#get-num-workers').disabled=false;
+            $('#get-heap-snapshot').disabled=false;
 
         }
         catch (e) {
@@ -197,6 +196,7 @@
             $('#get-stats').disabled=true;
             $('#get-load').disabled=true;
             $('#get-num-workers').disabled=true;
+            $('#get-heap-snapshot').disabled=true;
             $$('.capture-button').forEach(b=>b.disabled=false);
             simulcast.disabled=false;
 

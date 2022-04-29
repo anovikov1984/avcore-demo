@@ -11,6 +11,7 @@
         if (!results[2]) return '';
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     }
+    const mixerData={width:640,height:480};
     const $ = document.querySelector.bind(document);
     const $$ = document.querySelectorAll.bind(document);
     const streamIn = getParameterByName('streamIn');
@@ -25,6 +26,7 @@
     const streamMixer = getParameterByName('streamMixer');
     const tokenMixer = getParameterByName('tokenMixer');
     const filePath = getParameterByName('filePath');
+    const hasTransparency = !!getParameterByName('hasTransparency');
     const test = !!getParameterByName('test');
     const mixerButton=$('#mixer');
     const mixerButtons=$$('.mixer-button');
@@ -73,7 +75,20 @@
                     connectionBox.classList.remove('connected');
                 }
             });
-            await capture.publish(mediaStream);
+            const v=$('#own-video');
+            v.srcObject=await capture.publish(mediaStream);
+            let playPromise = v.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                }).catch(error => {
+                    v.muted=true;
+                    v.play().then(()=>{
+                        console.log('errorAutoPlayCallback OK');
+                    },(error)=>{
+                        console.log('errorAutoPlayCallback error again');
+                    });
+                });
+            }
         }
         catch (e) {
             if(e && ERROR[e.errorId]){
@@ -215,23 +230,22 @@
                     await api.mixerClose({mixerId});
                 }
             };
-            const res=await api.mixerStart();
+            const res=await api.mixerStart(mixerData);
             mixerId=res.mixerId;
             const promises=[
                 api.mixerAdd({mixerId,stream:streamIn,kind:'audio'}),
                 api.mixerAdd({mixerId,stream:streamOut,kind:'audio'})
             ];
-            if(!filePath){
+            if(!filePath || hasTransparency){
                 promises.push(
-                    api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:640,height:720,z:0,renderType:MIXER_RENDER_TYPE.CROP}}),
-                    api.mixerAdd({mixerId,stream:streamOut,kind:'video',options:{x:640,y:0,width:640,height:720,z:0,renderType:MIXER_RENDER_TYPE.CROP}})
+                    api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:mixerData.width/2,height:mixerData.height,z:0,renderType:MIXER_RENDER_TYPE.CROP}}),
+                    api.mixerAdd({mixerId,stream:streamOut,kind:'video',options:{x:mixerData.width/2,y:0,width:mixerData.width/2,height:mixerData.height,z:0,renderType:MIXER_RENDER_TYPE.CROP}})
                 );
             }
             else {
                 promises.push(
-                    api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:640,height:360,z:0,renderType:MIXER_RENDER_TYPE.CROP}}),
-                    api.mixerAdd({mixerId,stream:streamOut,kind:'video',options:{x:640,y:0,width:640,height:360,z:0,renderType:MIXER_RENDER_TYPE.CROP}}),
-                    api.mixerAddFile({stream:`${streamMixer}-file`,mixerId,kinds:['audio','video'],options:{x:0,y:360,width:1280,height:360,z:0,renderType:MIXER_RENDER_TYPE.PAD},filePath,removeOnExit:false,loop:true})
+                    api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:mixerData.width/2,height:mixerData.height,z:0,renderType:MIXER_RENDER_TYPE.CROP}}),
+                    api.mixerAdd({mixerId,stream:streamOut,kind:'video',options:{x:mixerData.width/2,y:0,width:mixerData.width/2,height:mixerData.height,z:0,renderType:MIXER_RENDER_TYPE.CROP}})
                 );
                 /*promises.push(
                     api.mixerAdd({mixerId,stream:streamIn,kind:'video',options:{x:0,y:0,width:640,height:720,z:1,renderType:MIXER_RENDER_TYPE.PAD}}),
@@ -239,6 +253,19 @@
                     api.mixerAddFile({mixerId,kinds:['audio','video'],options:{x:0,y:0,width:1280,height:720,z:0,renderType:MIXER_RENDER_TYPE.PAD},filePath,removeOnExit:false,loop:true})
                 );
                 */
+            }
+            if(filePath){
+                if(!hasTransparency){
+                    promises.push(api.mixerAddFile(
+                        {stream:`${streamMixer}-file`,mixerId,kinds:['audio','video'],options:{x:0,y:360,width:1280,height:360,z:0,renderType:MIXER_RENDER_TYPE.PAD},filePath,removeOnExit:false,loop:true}
+                    ));
+                }
+                else {
+                    promises.push(api.mixerAddFile(
+                        {stream:`${streamMixer}-file`,mixerId,kinds:['audio','video'],options:{x:0,y:0,width:1280,height:720,z:1,renderType:MIXER_RENDER_TYPE.PAD},filePath,removeOnExit:false,loop:true,hasTransparency}
+                    ));
+                }
+
             }
             await Promise.all(promises);
             mixerButton.innerText='Stop Mixer';
@@ -366,7 +393,7 @@
 
             }
             else {
-                const res=await api.mixerPipeStart({mixerId,kinds,type:MIXER_PIPE_TYPE.HLS,formats:[{videoBitrate:4000},{videoBitrate:1000,height:360}]});
+                const res=await api.mixerPipeStart({mixerId,kinds,type:MIXER_PIPE_TYPE.HLS,formats:[{videoBitrate:700,height:480}], location:api.location()});
                 mixerHlsPipeId=res.pipeId;
                 mixerHlsButton.innerText='Stop Mixer HLS';
                 copyHlsButton.disabled=false;

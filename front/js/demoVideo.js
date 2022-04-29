@@ -42,6 +42,7 @@
         $$('.listen-button').forEach(b=>b.style.display='none');
 
     }
+    const conferenceIds={};
     startButtons.forEach(b=>b.addEventListener('click',async (event)=> {
         startButtons.forEach(b=>b.disabled=true);
         event.preventDefault();
@@ -49,6 +50,7 @@
         const connectionBox=$('#connection-box');
         if(listen){
             try {
+                $('#request-keyframe').disable=true;
                 playback = new ConferenceApi({
                     url,worker,
                     kinds,
@@ -73,6 +75,13 @@
                     else {
                         connectionBox.classList.remove('connected');
                     }
+                }).on('newConsumerId', ({id, kind}) => {
+                    if(kind==='video'){
+                        $('#request-keyframe').disabled=false;
+                    }
+                    conferenceIds[kind] = id;
+                    console.log('newConsumerId', id, kind);
+
                 });
                 const v=$('#playback-video');
                 const play=()=>{
@@ -201,6 +210,7 @@
     let isRecording=false;
 
     if(recToken) {
+        recording.style.display='';
         const socketApi = new MediasoupSocketApi(url, worker, recToken);
         recording.disabled = false;
         recording.addEventListener('click', async (event)=> {
@@ -232,6 +242,11 @@
             elem.msRequestFullscreen();
         }
     });
-
+    $('#request-keyframe').addEventListener('click',async function (event) {
+        event.preventDefault();
+        if (playback && conferenceIds['video']) {
+            await playback['api'].requestKeyframe({consumerId:conferenceIds['video']})
+        }
+    });
 
 })();
