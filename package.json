@@ -16,10 +16,12 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "avcore": "^1.0.54",
+    "avcore": "^1.0.55",
+    "aws-sdk": "^2.830.0",
     "body-parser": "^1.18.3",
     "console-stamp": "^0.2.9",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
     "express": "^4.17.1",
     "jimp": "^0.16.0",
     "jsonwebtoken": "^8.5.1",

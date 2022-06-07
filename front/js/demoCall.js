@@ -300,7 +300,7 @@
     });
     playLiveButton.addEventListener('click', async function (event) {
         if(mixerLivePipeId){
-            window.open(`demoVideo.html?url=${url}&worker=${worker}&stream=${streamMixer}&token=${tokenMixer}&listen=true`, '_blank')
+            window.open(`demoVideo${window.location.pathname.includes('Old')?'Old':''}.html?url=${url}&worker=${worker}&stream=${streamMixer}&token=${tokenMixer}&listen=true`, '_blank')
         }
     });
     const adminRecButton=$('#rec-admin');
