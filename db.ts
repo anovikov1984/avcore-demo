@@ -1,6 +1,6 @@
 import {connect, connection as db, Document, model, Schema} from "mongoose";
 const dbConf={
-    "uri": "mongodb://127.0.0.1:27017/avcore-stats",
+    "uri": "mongodb://avcore-io-mongodb:27017/avcore-stats",
     "reconnectTimeout": 1000
 };
 db.on('error', (err)=>{

@@ -1,0 +1,18 @@
+networks:
+  avcore_io_avcore-io-network:
+    external: true
+services:
+  avcore-demo:
+    build:
+      context: .
+    container_name: avcore-demo
+    command: ["npm", "run", "test"]
+    restart: always
+    ports:
+      - "9099:9099"
+    logging:
+      options:
+        max-size: '300m'
+        max-file: '3'
+    networks:
+      - avcore_io_avcore-io-network
